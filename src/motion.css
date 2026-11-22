@@ -1,0 +1,378 @@
+/* Pointer effects are opt-in on fine pointers, with immediate native fallback. */
+:root {
+  --motion-preference: normal;
+  --pointer-precision: fine;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-preference: reduced;
+  }
+}
+@media (pointer: coarse) {
+  :root {
+    --pointer-precision: coarse;
+  }
+}
+.custom-cursor {
+  overflow: clip;
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  color: var(--blue);
+}
+:root[data-cursor="active"] .custom-cursor {
+  opacity: 1;
+}
+.cursor-dot {
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--blue);
+  transform: translate(var(--dot-x, -100px), var(--dot-y, -100px));
+}
+.cursor-ring {
+  position: absolute;
+  left: -19px;
+  top: -19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--blue);
+  border-radius: 50%;
+  transform: translate(var(--cursor-x, -100px), var(--cursor-y, -100px));
+  transition:
+    width 0.25s,
+    height 0.25s,
+    left 0.25s,
+    top 0.25s,
+    background 0.25s,
+    border-radius 0.25s;
+  background: transparent;
+}
+.cursor-ring > span {
+  position: absolute;
+  opacity: 0;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.cursor-ring > i {
+  font-style: normal;
+  font-size: 16px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.custom-cursor[data-mode="link"] .cursor-ring {
+  width: 54px;
+  height: 54px;
+  left: -27px;
+  top: -27px;
+  background: color-mix(in srgb, var(--blue) 8%, transparent);
+}
+.custom-cursor[data-mode="project"] .cursor-ring {
+  width: 70px;
+  height: 70px;
+  left: -35px;
+  top: -35px;
+  background: var(--blue);
+  color: var(--bg);
+  border: 1px solid var(--bg);
+  box-shadow: 0 3px 15px #1d3b491a;
+}
+.custom-cursor[data-mode="project"] .cursor-ring > span {
+  opacity: 1;
+}
+.custom-cursor[data-mode="project"] .cursor-ring > i {
+  opacity: 0;
+}
+.custom-cursor.is-pressed .cursor-ring {
+  width: 28px;
+  height: 28px;
+  left: -14px;
+  top: -14px;
+}
+.cursor-trail {
+  position: absolute;
+  left: -6px;
+  top: -6px;
+  opacity: 0;
+  font-size: 15px;
+  color: var(--blue);
+}
+.cursor-trail:nth-of-type(odd) {
+  color: #6caa49;
+  font-size: 12px;
+}
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--blue);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+  z-index: 65;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  :root[data-cursor="active"] body,
+  :root[data-cursor="active"] a,
+  :root[data-cursor="active"] button {
+    cursor: none;
+  }
+  :root[data-effects="on"] .folder:hover .folder-body {
+    transform: perspective(900px) rotateX(var(--rx, 0deg))
+      rotateY(var(--ry, 0deg));
+  }
+  :root[data-effects="on"] .folder-body::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+      circle at var(--shine-x, 50%) var(--shine-y, 50%),
+      #ffffff68,
+      transparent 57%
+    );
+    transition: opacity 0.3s;
+  }
+  :root[data-effects="on"] .folder:hover .folder-body::after {
+    opacity: 1;
+  }
+  :root[data-effects="on"] .button,
+  :root[data-effects="on"] .theme-toggle,
+  :root[data-effects="on"] .copy-button,
+  :root[data-effects="on"] .github-button {
+    transition:
+      translate 0.2s ease-out,
+      transform 0.25s,
+      box-shadow 0.25s,
+      background 0.2s;
+  }
+  :root[data-effects="on"] .hero-scribble {
+    translate: 0 calc(var(--hero-parallax, 0px) * -0.6);
+  }
+  :root[data-effects="on"] .hero-folders {
+    translate: 0 calc(var(--hero-parallax, 0px) * -0.25);
+  }
+}
+.folder {
+  user-select: none;
+}
+.folder-body {
+  transform-origin: center;
+  transition:
+    transform 0.22s ease-out,
+    box-shadow 0.3s;
+}
+.motion-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.75s ease var(--reveal-delay, 0ms),
+    transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms);
+}
+.motion-reveal.identity-card {
+  transform: translateY(32px) rotate(-4deg);
+}
+.motion-reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.motion-reveal.identity-card.is-revealed {
+  transform: rotate(-4deg);
+}
+.hero-line {
+  display: block;
+  overflow: clip;
+  padding: 0.14em 0 0.18em 0.08em;
+  margin: -0.14em 0 -0.18em -0.08em;
+}
+.hero-line-inner {
+  display: block;
+  padding-right: 0.1em;
+  line-height: 1.21;
+}
+:root[data-effects="on"] .hero-line-inner {
+  animation: title-arrive 1.05s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+:root[data-effects="on"] .hero-line:nth-child(2) .hero-line-inner {
+  animation-delay: 0.15s;
+}
+:root[data-effects="on"] .hero-folder {
+  animation: folder-arrive 1s cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation-delay: calc(0.15s + var(--i) * 0.1s);
+}
+:root[data-effects="on"] .hero-description {
+  animation: copy-arrive 0.9s 0.25s both;
+}
+:root[data-effects="on"] .outline-star {
+  animation: star-turn 24s linear infinite;
+}
+:root[data-effects="on"] .contact-star {
+  animation: star-turn 35s linear infinite;
+}
+:root[data-effects="on"] .project-dialog[open] {
+  animation: dialog-open 0.4s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+:root[data-effects="on"] .project-dialog::backdrop {
+  animation: backdrop-in 0.3s ease both;
+}
+:root[data-effects="on"] .dialog-scroll {
+  animation: detail-arrive 0.4s ease both;
+}
+@keyframes title-arrive {
+  from {
+    transform: translateY(115%) rotate(3deg);
+    opacity: 0.2;
+  }
+  to {
+    transform: translateY(0) rotate(0);
+    opacity: 1;
+  }
+}
+@keyframes folder-arrive {
+  from {
+    translate: 0 80px;
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+@keyframes copy-arrive {
+  from {
+    translate: 0 15px;
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    opacity: 1;
+  }
+}
+@keyframes detail-arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes star-turn {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes dialog-open {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.94) rotate(-1deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (pointer: coarse) {
+  .custom-cursor {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) .custom-cursor {
+    display: none;
+  }
+  :root:not([data-motion="full"]) .motion-reveal {
+    opacity: 1;
+    transform: none;
+  }
+  :root:not([data-motion="full"]) .motion-reveal.identity-card {
+    transform: rotate(-4deg);
+  }
+}
+.effects-control {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  padding: 0 11px;
+  min-height: 40px;
+}
+.motion-toggle[data-mode="on"] {
+  background: var(--soft-blue);
+  color: var(--blue);
+}
+.motion-toggle[data-mode="off"] {
+  opacity: 0.5;
+}
+@media (max-width: 760px) {
+  .motion-toggle {
+    width: 30px;
+    height: 36px;
+  }
+}
+@media (max-width: 380px) {
+  .hero-folder .folder-name {
+    font-size: 20px;
+    letter-spacing: -0.7px;
+  }
+  .site-header .wordmark {
+    font-size: 26px;
+  }
+  .site-header {
+    gap: 5px;
+  }
+  .header-controls {
+    gap: 2px;
+  }
+  .theme-toggle,
+  .menu-toggle,
+  .motion-toggle {
+    width: 28px;
+  }
+}
+.effects-control select {
+  font: inherit;
+  font-size: 11px;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  appearance: none;
+  padding: 10px 15px 10px 0;
+  cursor: pointer;
+}
+.effects-control::after {
+  content: "";
+  position: absolute;
+  right: 13px;
+  top: 15px;
+  width: 5px;
+  height: 5px;
+  border-right: 1px solid var(--muted);
+  border-bottom: 1px solid var(--muted);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
