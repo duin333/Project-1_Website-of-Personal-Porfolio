@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700;750&family=Noto+Sans+JP:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700;750&family=Lora:ital,wght@0,400;1,400&family=Noto+Sans+JP:wght@400;500;600;700&display=swap");
 
 :root {
   font-family: "DM Sans", "Noto Sans JP", system-ui, sans-serif;
@@ -86,7 +86,7 @@ p {
   margin: 0;
 }
 em {
-  font-family: Georgia, "Noto Sans JP", serif;
+  font-family: "Lora", "Times New Roman", "Noto Sans JP", serif;
   font-weight: 400;
 }
 section[id] {
@@ -264,7 +264,7 @@ section[id] {
   padding-top: 56px;
 }
 .hero-prefix {
-  font-family: Georgia, serif;
+  font-family: "Lora", "Times New Roman", serif;
   font-size: 22px;
   font-style: italic;
   color: var(--blue);
@@ -346,7 +346,7 @@ section[id] {
   position: absolute;
   right: 3%;
   top: 78px;
-  font-family: Georgia, serif;
+  font-family: "Lora", "Times New Roman", serif;
   font-style: italic;
   color: #57884a;
   font-size: 22px;
@@ -372,7 +372,7 @@ section[id] {
   position: absolute;
   top: -20px;
   right: 80px;
-  font-family: Georgia, serif;
+  font-family: "Lora", "Times New Roman", serif;
   font-style: italic;
   font-size: 15px;
   color: var(--muted);
@@ -1218,7 +1218,7 @@ h2 em {
   left: 30px;
   top: -15px;
   font-size: 250px;
-  font-family: Georgia, serif;
+  font-family: "Lora", "Times New Roman", serif;
   line-height: 1;
   letter-spacing: -20px;
 }
@@ -1235,7 +1235,7 @@ h2 em {
   position: absolute;
   left: 20px;
   bottom: 20px;
-  font-family: Georgia, serif;
+  font-family: "Lora", "Times New Roman", serif;
   font-style: italic;
   font-size: 18px;
   line-height: 1.2;
@@ -1279,7 +1279,7 @@ h2 em {
   position: absolute;
   bottom: -22px;
   right: -23px;
-  font-family: Georgia, serif;
+  font-family: "Lora", "Times New Roman", serif;
   font-size: 14px;
   font-style: italic;
   background: #b4ec78;
@@ -2713,4 +2713,9 @@ h2 em {
   :lang(ja) .hero-description p {
     font-size: 15px;
   }
+}
+
+@media (max-width: 760px) {
+  .hero h1 { font-size: clamp(32px, 7.5vw, 56px); }
+  .hero h1 em { letter-spacing: -1px; }
 }
