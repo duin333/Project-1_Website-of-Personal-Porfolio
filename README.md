@@ -29,8 +29,6 @@ npm run preview
 - Ngôn ngữ, theme và tùy chọn hiệu ứng chuột được lưu trong localStorage. Không có analytics, tài khoản hay backend thu thập dữ liệu.
 - Font Playfair Display, Be Vietnam Pro và Noto Sans JP được self-host bằng Fontsource, có bộ ký tự Vietnamese và fallback hệ thống; hình minh họa dự án được dựng bằng CSS, không dùng ảnh chụp ứng dụng giả.
 
-## Thêm dự án
-
 ## Mascot Mochi
 
 `src/Mascot.jsx` và `src/mascot.css` tạo mascot mèo xanh bằng SVG. Nhân vật đi qua lại ở mép dưới, nghỉ định kỳ, chào khi bấm, dừng khi hover/focus, và ẩn trong dialog/menu. Nút X ẩn nhân vật; nút dấu chân hiện lại. Lựa chọn ẩn/hiện được lưu trong `duyen-mascot`. FX OFF hoặc AUTO với reduced-motion giữ nhân vật đứng yên. Không tải asset bên ngoài.
