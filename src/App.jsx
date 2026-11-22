@@ -590,6 +590,21 @@ export default function App() {
             {theme === "light" ? <Moon size={19} /> : <Sun size={19} />}
           </button>
           <button
+            className="icon-button motion-toggle"
+            data-mode={effectsMode}
+            title={`FX ${effectsMode.toUpperCase()}`}
+            aria-label={
+              effectsMode === "auto"
+                ? {vi:"Bật đầy đủ hiệu ứng",en:"Enable full motion",ja:"すべてのモーションをオン"}[lang]
+                : effectsMode === "on"
+                  ? {vi:"Tắt hiệu ứng",en:"Turn motion off",ja:"モーションをオフ"}[lang]
+                  : {vi:"Hiệu ứng theo cài đặt hệ thống",en:"Use system motion preference",ja:"システムのモーション設定を使用"}[lang]
+            }
+            onClick={()=>setEffectsMode(effectsMode==="auto"?"on":effectsMode==="on"?"off":"auto")}
+          >
+            <Sparkles size={18}/>
+          </button>
+          <button
             className="icon-button menu-toggle"
             aria-expanded={menu}
             aria-controls="mobile-nav"

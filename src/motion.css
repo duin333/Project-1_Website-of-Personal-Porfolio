@@ -320,6 +320,14 @@
   padding: 0 11px;
   min-height: 40px;
 }
+.motion-toggle[data-mode="on"] { background: var(--soft-blue); color: var(--blue); }
+.motion-toggle[data-mode="off"] { opacity: .5; }
+@media(max-width:760px) { .motion-toggle { width: 30px; height: 36px; } }
+@media(max-width:380px) {
+  .site-header { gap: 5px; }
+  .header-controls { gap: 2px; }
+  .theme-toggle,.menu-toggle,.motion-toggle { width: 28px; }
+}
 .effects-control select {
   font: inherit;
   font-size: 11px;
