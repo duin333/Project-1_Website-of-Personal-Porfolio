@@ -31,6 +31,12 @@ npm run preview
 
 ## Thêm dự án
 
+## Mascot Mochi
+
+`src/Mascot.jsx` và `src/mascot.css` tạo mascot mèo xanh bằng SVG. Nhân vật đi qua lại ở mép dưới, nghỉ định kỳ, chào khi bấm, dừng khi hover/focus, và ẩn trong dialog/menu. Nút X ẩn nhân vật; nút dấu chân hiện lại. Lựa chọn ẩn/hiện được lưu trong `duyen-mascot`. FX OFF hoặc AUTO với reduced-motion giữ nhân vật đứng yên. Không tải asset bên ngoài.
+
+## Thêm dự án
+
 1. Thêm object vào `projects` trong `src/content.js`: `id`, `name`, `category`, `color`, `type`, `status`, `repo`, `stack`.
 2. Thêm `vi`, `en`, `ja`, mỗi bản có `subtitle`, `summary`, `description`, `highlights` (ba mục), `next`.
 3. Thêm ba bản dịch vai trò vào `roles`.

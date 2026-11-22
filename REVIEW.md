@@ -36,3 +36,9 @@
 - Dialog: dùng lại native cursor, Escape đóng và khôi phục focus. Kiểm tra không có lỗi console.
 - Mobile 320/390px: kiểm tra theo `clientWidth` (trừ scrollbar), không tràn ngang; tên folder thu nhỏ phù hợp ở 320px. Kiểm tra nội dung Việt và Nhật sau khi đổi font.
 - Chi tiết phân tích ba trang tham khảo và cấu trúc animation: `docs/MOTION.md`.
+
+## Mascot
+
+- Kiểm tra mascot di chuyển, nghỉ, đổi hướng và hiện lời chào khi bấm.
+- Ẩn nhân vật, reload: nút hiện lại vẫn có; chọn hiện lại để khôi phục.
+- FX OFF: nhân vật đứng yên. Dialog dự án mở: mascot tạm ẩn.

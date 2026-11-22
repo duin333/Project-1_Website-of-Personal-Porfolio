@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import MotionEffects from "./MotionEffects.jsx";
+import Mascot from "./Mascot.jsx";
 import {
   ArrowUp,
   Check,
@@ -538,6 +539,11 @@ export default function App() {
         force={effectsMode === "on"}
         lang={lang}
         modalOpen={Boolean(activeProject)}
+      />
+      <Mascot
+        lang={lang}
+        mode={effectsMode}
+        concealed={Boolean(activeProject) || menu}
       />
       <header className="site-header">
         <a className="wordmark" href="#home" aria-label="Duyên — home">
