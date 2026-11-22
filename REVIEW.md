@@ -34,5 +34,5 @@
 - Trình duyệt kiểm thử có `prefers-reduced-motion: reduce`: AUTO không chạy animation; ON chạy cursor, reveal và star rotation; OFF trả về native cursor và nội dung tĩnh.
 - Hover folder: cursor đổi sang MỞ / VIEW / 見る; các biến góc nghiêng 3D và glare thay đổi theo vị trí chuột.
 - Dialog: dùng lại native cursor, Escape đóng và khôi phục focus. Kiểm tra không có lỗi console.
-- Mobile 390px: không tràn ngang với nội dung Việt và Nhật sau khi đổi font.
+- Mobile 320/390px: kiểm tra theo `clientWidth` (trừ scrollbar), không tràn ngang; tên folder thu nhỏ phù hợp ở 320px. Kiểm tra nội dung Việt và Nhật sau khi đổi font.
 - Chi tiết phân tích ba trang tham khảo và cấu trúc animation: `docs/MOTION.md`.

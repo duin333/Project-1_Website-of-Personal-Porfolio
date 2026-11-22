@@ -595,14 +595,34 @@ export default function App() {
             title={`FX ${effectsMode.toUpperCase()}`}
             aria-label={
               effectsMode === "auto"
-                ? {vi:"Bật đầy đủ hiệu ứng",en:"Enable full motion",ja:"すべてのモーションをオン"}[lang]
+                ? {
+                    vi: "Bật đầy đủ hiệu ứng",
+                    en: "Enable full motion",
+                    ja: "すべてのモーションをオン",
+                  }[lang]
                 : effectsMode === "on"
-                  ? {vi:"Tắt hiệu ứng",en:"Turn motion off",ja:"モーションをオフ"}[lang]
-                  : {vi:"Hiệu ứng theo cài đặt hệ thống",en:"Use system motion preference",ja:"システムのモーション設定を使用"}[lang]
+                  ? {
+                      vi: "Tắt hiệu ứng",
+                      en: "Turn motion off",
+                      ja: "モーションをオフ",
+                    }[lang]
+                  : {
+                      vi: "Hiệu ứng theo cài đặt hệ thống",
+                      en: "Use system motion preference",
+                      ja: "システムのモーション設定を使用",
+                    }[lang]
             }
-            onClick={()=>setEffectsMode(effectsMode==="auto"?"on":effectsMode==="on"?"off":"auto")}
+            onClick={() =>
+              setEffectsMode(
+                effectsMode === "auto"
+                  ? "on"
+                  : effectsMode === "on"
+                    ? "off"
+                    : "auto",
+              )
+            }
           >
-            <Sparkles size={18}/>
+            <Sparkles size={18} />
           </button>
           <button
             className="icon-button menu-toggle"
