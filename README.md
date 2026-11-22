@@ -27,7 +27,7 @@ npm run preview
 - Project detail dùng native `<dialog>`: modal focus trap, Escape, khôi phục focus về folder. Dùng hash route để chia sẻ URL mà không cần server routing.
 - Ví dụ `/#/ja/projects/comichub`. Các liên kết trong trang dùng `#projects`, `#about`, `#contact`.
 - Ngôn ngữ, theme và tùy chọn hiệu ứng chuột được lưu trong localStorage. Không có analytics, tài khoản hay backend thu thập dữ liệu.
-- Font Google Fonts có fallback font hệ thống; hình minh họa dự án được dựng bằng CSS, không dùng ảnh chụp ứng dụng giả.
+- Font Playfair Display, Be Vietnam Pro và Noto Sans JP được self-host bằng Fontsource, có bộ ký tự Vietnamese và fallback hệ thống; hình minh họa dự án được dựng bằng CSS, không dùng ảnh chụp ứng dụng giả.
 
 ## Thêm dự án
 
