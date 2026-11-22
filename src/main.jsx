@@ -9,6 +9,7 @@ import "@fontsource/playfair-display/400.css";
 import "@fontsource/playfair-display/400-italic.css";
 import "@fontsource/noto-sans-jp/400.css";
 import "./styles.css";
+import "./motion.css";
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />

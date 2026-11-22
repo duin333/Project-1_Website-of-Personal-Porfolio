@@ -2622,29 +2622,25 @@ h2 em {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  :root {
+  :root:not([data-motion="full"]) {
     scroll-behavior: auto;
   }
-  *,
-  *:before,
-  *:after {
+  :root:not([data-motion="full"]) *,
+  :root:not([data-motion="full"]) *::before,
+  :root:not([data-motion="full"]) *::after {
     animation: none !important;
     transition: none !important;
   }
-  .pointer-glow {
+  :root:not([data-motion="full"]) .pointer-glow {
     display: none;
   }
-  .folder:hover,
-  .hero-folder:hover,
-  .hero-folder:focus-visible,
-  .project-folder:hover {
-    transform: none;
-  }
-  .folder:hover .folder-sheet {
-    transform: none;
-  }
-  .button:hover,
-  .icon-button:hover {
+  :root:not([data-motion="full"]) .folder:hover,
+  :root:not([data-motion="full"]) .hero-folder:hover,
+  :root:not([data-motion="full"]) .hero-folder:focus-visible,
+  :root:not([data-motion="full"]) .project-folder:hover,
+  :root:not([data-motion="full"]) .folder:hover .folder-sheet,
+  :root:not([data-motion="full"]) .button:hover,
+  :root:not([data-motion="full"]) .icon-button:hover {
     transform: none;
   }
 }
@@ -2714,17 +2710,41 @@ h2 em {
 }
 
 @media (max-width: 760px) {
-  .hero h1 { font-size: clamp(32px, 7.5vw, 56px); }
-  .hero h1 em { letter-spacing: -1px; }
+  .hero h1 {
+    font-size: clamp(32px, 7.5vw, 56px);
+  }
+  .hero h1 em {
+    letter-spacing: -1px;
+  }
 }
 
 /* Editorial typography: ship complete Vietnamese subsets with the site. */
-h1, h2 { letter-spacing: -.035em; }
-.hero h1 em { letter-spacing: -.035em; line-height: 1.18; }
-:lang(ja) { font-family: "Noto Sans JP", "Yu Gothic", sans-serif; }
-:lang(ja) .hero h1 em, :lang(ja) em { font-family: "Noto Sans JP", "Yu Gothic", sans-serif; font-style: normal; }
-@media(max-width:760px) {
-  .hero h1 { font-size: clamp(30px, 7.3vw, 54px); letter-spacing: -.045em; }
-  .hero h1 em { letter-spacing: -.04em; }
-  :lang(ja) .hero h1 { font-size: clamp(28px, 6vw, 42px); letter-spacing: -.04em; }
+h1,
+h2 {
+  letter-spacing: -0.035em;
+}
+.hero h1 em {
+  letter-spacing: -0.035em;
+  line-height: 1.18;
+}
+:lang(ja) {
+  font-family: "Noto Sans JP", "Yu Gothic", sans-serif;
+}
+:lang(ja) .hero h1 em,
+:lang(ja) em {
+  font-family: "Noto Sans JP", "Yu Gothic", sans-serif;
+  font-style: normal;
+}
+@media (max-width: 760px) {
+  .hero h1 {
+    font-size: clamp(30px, 7.3vw, 54px);
+    letter-spacing: -0.045em;
+  }
+  .hero h1 em {
+    letter-spacing: -0.04em;
+  }
+  :lang(ja) .hero h1 {
+    font-size: clamp(28px, 6vw, 42px);
+    letter-spacing: -0.04em;
+  }
 }

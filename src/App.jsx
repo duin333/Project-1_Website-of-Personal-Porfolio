@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import MotionEffects from "./MotionEffects.jsx";
 import {
   ArrowUp,
   Check,
@@ -196,8 +197,9 @@ function Folder({ project, lang, t, hero = false, onOpen, index }) {
   const ref = useRef(null);
   function tilt(e) {
     if (
-      matchMedia("(prefers-reduced-motion: reduce), (pointer: coarse)")
-        .matches ||
+      (matchMedia("(prefers-reduced-motion: reduce)").matches &&
+        document.documentElement.dataset.motion !== "full") ||
+      matchMedia("(pointer: coarse)").matches ||
       document.documentElement.dataset.effects === "off"
     )
       return;
@@ -205,6 +207,22 @@ function Folder({ project, lang, t, hero = false, onOpen, index }) {
     ref.current?.style.setProperty(
       "--tilt",
       `${((e.clientX - b.left) / b.width - 0.5) * 5}deg`,
+    );
+    ref.current?.style.setProperty(
+      "--rx",
+      `${-((e.clientY - b.top) / b.height - 0.5) * 9}deg`,
+    );
+    ref.current?.style.setProperty(
+      "--ry",
+      `${((e.clientX - b.left) / b.width - 0.5) * 12}deg`,
+    );
+    ref.current?.style.setProperty(
+      "--shine-x",
+      `${((e.clientX - b.left) / b.width) * 100}%`,
+    );
+    ref.current?.style.setProperty(
+      "--shine-y",
+      `${((e.clientY - b.top) / b.height) * 100}%`,
     );
   }
   return (
@@ -214,7 +232,11 @@ function Folder({ project, lang, t, hero = false, onOpen, index }) {
       style={{ "--i": index }}
       onClick={(e) => onOpen(project.id, e.currentTarget)}
       onPointerMove={tilt}
-      onPointerLeave={() => ref.current?.style.setProperty("--tilt", "0deg")}
+      onPointerLeave={() => {
+        ["--tilt", "--rx", "--ry"].forEach((key) =>
+          ref.current?.style.setProperty(key, "0deg"),
+        );
+      }}
       aria-label={`${t.open}: ${project.name}`}
     >
       <span className="folder-tab">
@@ -404,9 +426,11 @@ export default function App() {
   const [theme, setTheme] = useState(
     document.documentElement.dataset.theme || "light",
   );
-  const [effects, setEffects] = useState(
-    saved("duyen-effects", "on") !== "off",
-  );
+  const [effectsMode, setEffectsMode] = useState(() => {
+    const mode = saved("duyen-motion", "auto");
+    return ["auto", "on", "off"].includes(mode) ? mode : "auto";
+  });
+  const effects = effectsMode !== "off";
   const [menu, setMenu] = useState(false);
   const [filter, setFilter] = useState("all");
   const [toast, setToast] = useState("");
@@ -445,7 +469,9 @@ export default function App() {
   }, [theme]);
   useEffect(() => {
     document.documentElement.dataset.effects = effects ? "on" : "off";
-    persist("duyen-effects", effects ? "on" : "off");
+    document.documentElement.dataset.motion =
+      effectsMode === "on" ? "full" : effectsMode;
+    persist("duyen-motion", effectsMode);
     if (!effects) return;
     const move = (e) => {
       document.documentElement.style.setProperty("--mouse-x", `${e.clientX}px`);
@@ -453,7 +479,7 @@ export default function App() {
     };
     addEventListener("pointermove", move, { passive: true });
     return () => removeEventListener("pointermove", move);
-  }, [effects]);
+  }, [effects, effectsMode]);
   useEffect(() => () => clearTimeout(toastTimer.current), []);
   useEffect(() => {
     if (!menu) return;
@@ -507,6 +533,12 @@ export default function App() {
         {t.skip}
       </a>
       <div className="pointer-glow" aria-hidden="true" />
+      <MotionEffects
+        enabled={effects}
+        force={effectsMode === "on"}
+        lang={lang}
+        modalOpen={Boolean(activeProject)}
+      />
       <header className="site-header">
         <a className="wordmark" href="#home" aria-label="Duyên — home">
           duyên<span className="logo-star">✳</span>
@@ -584,10 +616,13 @@ export default function App() {
             <span className="hero-prefix">
               Portfolio <span className="outline-star">✳</span>
             </span>
-            <h1>
-              {t.heroTop}
-              <br />
-              <em>{t.heroBottom}</em>
+            <h1 key={lang}>
+              <span className="hero-line">
+                <span className="hero-line-inner">{t.heroTop}</span>
+              </span>
+              <span className="hero-line">
+                <em className="hero-line-inner">{t.heroBottom}</em>
+              </span>
             </h1>
             <div className="hero-description">
               <p>{t.heroDescription}</p>
@@ -916,15 +951,24 @@ export default function App() {
           <span>{t.footer}</span>
         </p>
         <div className="footer-actions">
-          <button
-            className="icon-button effects-toggle"
-            onClick={() => setEffects(!effects)}
-            aria-pressed={effects}
-            aria-label={effects ? t.effectOn : t.effectOff}
-          >
+          <label className="effects-control">
             <MousePointer2 size={17} />
-            <span>FX {effects ? "ON" : "OFF"}</span>
-          </button>
+            <select
+              value={effectsMode}
+              onChange={(e) => setEffectsMode(e.target.value)}
+              aria-label={
+                {
+                  vi: "Hiệu ứng chuyển động",
+                  en: "Motion effects",
+                  ja: "モーション効果",
+                }[lang]
+              }
+            >
+              <option value="auto">FX AUTO</option>
+              <option value="on">FX ON</option>
+              <option value="off">FX OFF</option>
+            </select>
+          </label>
           <a className="icon-button" href="#home" aria-label={t.top}>
             <ArrowUp size={22} />
           </a>
