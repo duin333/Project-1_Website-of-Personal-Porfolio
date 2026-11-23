@@ -12,6 +12,7 @@ import "./styles.css";
 import "./motion.css";
 import "./wide-layout.css";
 import "./layout-polish.css";
+import "./navigation-scroll.css";
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />

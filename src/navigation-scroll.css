@@ -1,0 +1,32 @@
+/* Full-width navigation at every zoom-derived viewport size. */
+.site-header { width:100%; max-width:none; margin-inline:0; padding-inline:clamp(20px,4vw,120px); transition:transform .24s ease; will-change:transform; }
+.site-header .main-nav { flex-shrink:0; }
+.site-header .header-controls { flex-shrink:0; }
+.site-header[data-hidden="true"] { transform:translateY(-100%); pointer-events:none; }
+.reading-progress { transition:top .24s ease; }
+:root[data-nav-hidden="true"] .reading-progress { top:0; }
+/* Hide the page scrollbar only; the horizontal project rail stays discoverable. */
+html { scrollbar-width:none; -ms-overflow-style:none; }
+html::-webkit-scrollbar,body::-webkit-scrollbar { width:0; height:0; display:none; }
+@media(min-width:1800px) {
+ .site-header .main-nav { gap:clamp(18px,1.6vw,42px); }
+ .site-header .main-nav a { font-size:.9375rem; }
+ .music-caption { width:130px; }
+}
+@media(max-width:760px) { .site-header { padding-inline:4%; } }
+@media(max-width:380px) { .site-header { padding-inline:3%; } }
+@media(prefers-reduced-motion:reduce) { .site-header,.reading-progress { transition:none; } }
+/* The loading flower rotates and breathes through one complete entrance. */
+.loader-folders span { animation:loader-flower-orbit 2.5s cubic-bezier(.45,0,.2,1) infinite; transform-origin:center; }
+.loader-wordmark span { animation:loader-flower-turn 2.5s cubic-bezier(.4,0,.2,1) infinite; }
+@keyframes loader-flower-orbit {
+  0% { transform:translateY(0) rotate(-30deg) scale(.85); }
+  45% { transform:translateY(-18px) rotate(150deg) scale(1.15); }
+  100% { transform:translateY(0) rotate(330deg) scale(.85); }
+}
+@keyframes loader-flower-turn {
+  0% { transform:rotate(0) scale(.88); }
+  50% { transform:rotate(180deg) scale(1.08); }
+  100% { transform:rotate(360deg) scale(.88); }
+}
+@media(prefers-reduced-motion:reduce) { :root:not([data-motion="full"]) .loader-folders span,:root:not([data-motion="full"]) .loader-wordmark span { animation:none; } }

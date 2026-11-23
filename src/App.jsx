@@ -347,6 +347,8 @@ export default function App() {
   });
   const effects = effectsMode !== "off";
   const [menu, setMenu] = useState(false);
+  const [navHidden, setNavHidden] = useState(false);
+  const navLockUntil = useRef(0);
   const [activeSection, setActiveSection] = useState("home");
   const [filter, setFilter] = useState("all");
   const [toast, setToast] = useState("");
@@ -437,6 +439,31 @@ export default function App() {
     addEventListener('scroll', scroll, {passive:true}); update();
     return () => {removeEventListener('scroll', scroll); cancelAnimationFrame(frame);};
   }, [activeProject, lang, loading]);
+  useEffect(() => {
+    document.documentElement.dataset.navHidden = String(navHidden);
+  }, [navHidden]);
+  useEffect(() => {
+    setNavHidden(false);
+    if (activeProject || menu || loading) return;
+    let previous = scrollY, accumulated = 0, frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = Math.max(0, scrollY), delta = y - previous;
+      previous = y;
+      const header = document.querySelector('.site-header');
+      if (y < 120 || performance.now() < navLockUntil.current || header?.querySelector('details[open], :focus-visible')) {
+        accumulated = 0; setNavHidden(false); return;
+      }
+      if (Math.sign(delta) !== Math.sign(accumulated)) accumulated = 0;
+      accumulated += delta;
+      if (accumulated > 14) setNavHidden(true);
+      if (accumulated < -8) setNavHidden(false);
+    };
+    const scroll = () => {if (!frame) frame = requestAnimationFrame(update);};
+    const resize = () => {previous = scrollY; accumulated = 0; setNavHidden(false);};
+    addEventListener('scroll',scroll,{passive:true}); addEventListener('resize',resize);
+    return () => {removeEventListener('scroll',scroll); removeEventListener('resize',resize); cancelAnimationFrame(frame);};
+  }, [activeProject, menu, loading]);
   function openProject(id) {
     homeScroll.current = window.scrollY;
     setMenu(false);
@@ -444,6 +471,8 @@ export default function App() {
     history.pushState({ project: id }, "", projectRoute(lang, id));
   }
   function goHome(section = "home") {
+    navLockUntil.current = performance.now() + 650;
+    setNavHidden(false);
     setActiveSection(section);
     setActiveProject(null);
     setMenu(false);
@@ -497,7 +526,7 @@ export default function App() {
         mode={effectsMode}
         concealed={loading || menu}
       />
-      <header className="site-header">
+      <header className="site-header" data-hidden={navHidden} onFocusCapture={()=>setNavHidden(false)}>
         <a className="wordmark" href={`${projectRoute(lang)}#home`} onClick={e=>{e.preventDefault();goHome("home");}} aria-label="Duyên — home">
           duyên<span className="logo-star">✳</span>
         </a>
