@@ -1,3 +1,6 @@
+import Experience from "./Experience.jsx";
+import ContactSection from "./ContactSection.jsx";
+import "./journey-contact.css";
 import ArchiveLoader from "./ArchiveLoader.jsx";
 import { linkedin } from "./profile.js";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -480,8 +483,8 @@ export default function App() {
           {t.nav.map((n, i) => (
             <a
               key={i}
-              href={`${projectRoute(lang)}#${["projects", "about", "contact"][i]}`}
-              onClick={e=>{e.preventDefault();goHome(["projects", "about", "contact"][i]);}}
+              href={`${projectRoute(lang)}#${["projects", "about", "skills", "experience", "contact"][i]}`}
+              onClick={e=>{e.preventDefault();goHome(["projects", "about", "skills", "experience", "contact"][i]);}}
             >
               {n}
               <span>0{i + 1}</span>
@@ -786,22 +789,14 @@ export default function App() {
             </div>
           </div>
         </section>
-        <section className="journey-section section-wrap" aria-labelledby="journey-title">
-          <span className="eyebrow">{t.journeyLabel}</span>
-          <h2 id="journey-title">{t.journeyTitle}</h2>
-          <div className="journey-grid">
-            <article className="education-entry"><span className="journey-meta">2024–2028</span><h3>UTE · {t.education}</h3><p>{t.educationValue}</p><p>{t.educationNote}</p><strong>{t.gpaNote}</strong></article>
-            <div className="community-list">{[["GDGoC-DUT",t.gdg],["DSUC",t.dsuc],["BBE",t.bbe]].map(([name,description])=><article key={name}><h3>{name}</h3><p>{description}</p></article>)}<p className="small-note">{t.communityNote}</p></div>
-          </div>
-        </section>
-        <section className="tools-section section-wrap">
+        <section id="skills" className="tools-section section-wrap" aria-labelledby="skills-title">
           <div className="section-heading">
             <div>
               <span className="eyebrow">
                 <span className="cross">+</span>
-                {t.toolsLabel}
+                Skills / {t.toolsLabel}
               </span>
-              <h2>
+              <h2 id="skills-title">
                 {t.toolsTitle}
                 <br />
                 <em>{t.toolsItalic}</em>
@@ -851,54 +846,8 @@ export default function App() {
             </span>
           </p>
         </section>
-        <section id="contact" className="contact-section">
-          <div className="contact-inner">
-            <span className="eyebrow">{t.contactLabel}</span>
-            <h2>
-              {t.contactTitle}
-              <br />
-              <em>{t.contactItalic}</em>
-              <span className="contact-star" aria-hidden="true">
-                ✳
-              </span>
-            </h2>
-            <div className="contact-bottom">
-              <p>{t.contactP}</p>
-              <div>
-                <a className="contact-email" href={`mailto:${email}`}>
-                  {email}
-                </a>
-                <div className="contact-actions">
-                  <a className="text-link" href={linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                  <a className="button dark-button" href={`mailto:${email}`}>
-                    <Mail size={18} />
-                    {t.mail}
-                  </a>
-                  <button
-                    className="icon-button copy-button"
-                    onClick={copyEmail}
-                    aria-label={t.copyMail}
-                  >
-                    {toast === t.copied ? (
-                      <Check size={20} />
-                    ) : (
-                      <Copy size={20} />
-                    )}
-                  </button>
-                  <a
-                    className="icon-button github-button"
-                    href={github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="GitHub"
-                  >
-                    <Github size={21} />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <Experience lang={lang} t={t} onOpen={openProject}/>
+        <ContactSection lang={lang} t={t}/>
       </main>}
       <footer className="site-footer">
         <a className="wordmark" href={`${projectRoute(lang)}#home`} onClick={e=>{e.preventDefault();goHome("home");}}>

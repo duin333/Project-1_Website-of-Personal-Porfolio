@@ -16,7 +16,7 @@ test("all supported languages have the same UI keys and nonempty strings", () =>
     for (const [key, value] of Object.entries(copy[lang])) {
       assert.ok(
         Array.isArray(value)
-          ? value.length === 3 && value.every(Boolean)
+          ? value.length === copy.vi[key].length && value.every(Boolean)
           : typeof value === "string" && value.trim().length > 0,
         `${lang}.${key}`,
       );
