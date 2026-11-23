@@ -52,19 +52,10 @@
 .language-picker summary::-webkit-details-marker { display:none; }
 .language-options { position:absolute; top:calc(100% + 12px); right:0; min-width:175px; padding:8px; background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:0 14px 40px #0003; z-index:105; }
 .music-box { border-radius:8px; }
-.music-stage:empty { display:none; }
-.music-stage { background:var(--surface); border-bottom:1px solid var(--line); }
-.music-stage-inner { display:flex; align-items:center; gap:28px; max-width:900px; margin:auto; padding:24px; position:relative; }
-.music-stage-inner .youtube-host { width:356px; flex-shrink:0; }
-.music-stage-info { display:grid; gap:9px; flex:1; min-width:0; }
-.music-stage-info>small,.music-stage-info>span { color:var(--muted); font-size:.8125rem; }
-.music-stage-info>strong { font-family:var(--font-display); font-size:1.4rem; }
-.music-stage-info>a { display:flex; align-items:center; gap:6px; font-size:.8125rem; color:var(--blue); }
-.music-stage-inner>.icon-button { align-self:flex-start; flex-shrink:0; }
-.youtube-notice { font-size:.8125rem; color:var(--muted); }
-@media(max-width:650px) {
- .music-stage-inner { flex-wrap:wrap; gap:16px; padding:20px 24px; }
- .music-stage-inner .youtube-host { width:100%; }
- .music-stage-info { padding-right:35px; }
- .music-stage-inner>.icon-button { position:absolute; right:20px; bottom:20px; }
-}
+
+.site-header .main-nav a[aria-current="location"] { color:var(--blue); }
+.site-header .main-nav a[aria-current="location"]:after { display:block; transform:scaleX(1); height:2px; background:var(--blue); }
+.site-header .main-nav a[aria-current="location"]>span { color:var(--blue); }
+@media(max-width:1100px) { .site-header .main-nav a[aria-current="location"] { padding-left:12px; border-left:3px solid var(--blue); background:var(--soft-blue); } .site-header .main-nav a[aria-current="location"]:after { display:none; } }
+
+.nav-music button:disabled { opacity:.55; cursor:default; }

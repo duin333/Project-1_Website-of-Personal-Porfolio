@@ -346,6 +346,7 @@ export default function App() {
   });
   const effects = effectsMode !== "off";
   const [menu, setMenu] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const [filter, setFilter] = useState("all");
   const [toast, setToast] = useState("");
   const homeScroll = useRef(0);
@@ -410,6 +411,30 @@ export default function App() {
     addEventListener("keydown", esc);
     return () => removeEventListener("keydown", esc);
   }, [menu]);
+  useEffect(() => {
+    const header = document.querySelector('.site-header');
+    const size = () => document.documentElement.style.setProperty('--nav-height', `${header?.getBoundingClientRect().height || 97}px`);
+    const observer = new ResizeObserver(size);
+    if (header) observer.observe(header);
+    size();
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    if (activeProject) return;
+    let frame;
+    const update = () => {
+      const edge = (document.querySelector('.site-header')?.getBoundingClientRect().height || 97) + 100;
+      let current = 'home';
+      for (const id of ['home','projects','about','skills','experience','contact']) {
+        if ((document.getElementById(id)?.getBoundingClientRect().top ?? Infinity) <= edge) current = id;
+      }
+      if (scrollY + innerHeight >= document.documentElement.scrollHeight - 5) current = 'contact';
+      setActiveSection(current);
+    };
+    const scroll = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(update); };
+    addEventListener('scroll', scroll, {passive:true}); update();
+    return () => {removeEventListener('scroll', scroll); cancelAnimationFrame(frame);};
+  }, [activeProject, lang, loading]);
   function openProject(id) {
     homeScroll.current = window.scrollY;
     setMenu(false);
@@ -417,6 +442,7 @@ export default function App() {
     history.pushState({ project: id }, "", projectRoute(lang, id));
   }
   function goHome(section = "home") {
+    setActiveSection(section);
     setActiveProject(null);
     setMenu(false);
     history.pushState(null, "", `${projectRoute(lang)}#${section}`);
@@ -487,6 +513,7 @@ export default function App() {
           {t.nav.map((n, i) => (
             <a
               key={i}
+              aria-current={(activeProject ? i === 0 : activeSection === ["projects", "about", "skills", "experience", "contact"][i]) ? "location" : undefined}
               href={`${projectRoute(lang)}#${["projects", "about", "skills", "experience", "contact"][i]}`}
               onClick={e=>{e.preventDefault();goHome(["projects", "about", "skills", "experience", "contact"][i]);}}
             >
@@ -552,7 +579,6 @@ export default function App() {
           </button>
         </div>
       </header>
-      <div id="music-stage" className="music-stage"/>
       {activeProject ? <ProjectPage project={projects.find(p=>p.id===activeProject)} lang={lang} t={t} close={closeProject} navigate={navigateProject}/> : <main id="main">
         <section id="home" className="hero">
           <div className="hero-kicker">

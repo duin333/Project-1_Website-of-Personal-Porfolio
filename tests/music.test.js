@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
 import { tracks } from '../src/music.js';
-test('Ghibli playlist has unique performer video IDs and complete display metadata',()=>{
+test('local playlist references real bundled audio files with unique IDs',()=>{
  assert.equal(new Set(tracks.map(t=>t.id)).size,tracks.length);
- assert.equal(new Set(tracks.map(t=>t.videoId)).size,tracks.length);
- for(const t of tracks){assert.match(t.videoId,/^[a-zA-Z0-9_-]{11}$/);assert.ok(t.title&&t.film);assert.ok(t.artist);assert.equal('src' in t,false);}
+ for(const t of tracks){assert.ok(t.title&&t.artist);assert.match(t.src,/^\/music\/[\w.-]+\.(mp3|ogg|wav|m4a)$/);assert.ok(existsSync(new URL(`../public${t.src}`,import.meta.url)));}
 });

@@ -1,72 +1,34 @@
-import { createPortal } from "react-dom";
 import { useEffect, useRef, useState } from "react";
-import { Music2, Volume2, VolumeX, LoaderCircle, X, ExternalLink } from "lucide-react";
+import { Music2, Volume2, VolumeX, LoaderCircle } from "lucide-react";
 import { tracks } from "./music.js";
-import { loadYouTubeApi } from "./youtube.js";
-const copy={
- vi:{next:'Đổi bài nhạc',list:'Chọn nhạc Ghibli',on:'Bật nhạc nền',off:'Tắt nhạc nền',volume:'Âm lượng',error:'YouTube chưa phát được. Thử bài khác hoặc mở trên YouTube.',hint:'Bấm hộp nhạc để đổi bài',source:'Mở trên YouTube',paused:'Đang tắt',playing:'Đang phát',loading:'Đang tải',close:'Đóng và dừng nhạc',blocked:'Bấm nút phát trong player để bắt đầu.',note:'Ghibli · Piano covers'},
- en:{next:'Next track',list:'Ghibli music',on:'Turn background music on',off:'Turn background music off',volume:'Volume',error:'YouTube cannot play this track. Try another or open YouTube.',hint:'Click the music box to change tracks',source:'Open on YouTube',paused:'Off',playing:'Playing',loading:'Loading',close:'Close and stop music',blocked:'Press play in the player to begin.',note:'Ghibli · Piano covers'},
- ja:{next:'次の曲',list:'ジブリの音楽',on:'BGMをオン',off:'BGMをオフ',volume:'音量',error:'再生できません。別の曲を選ぶか、YouTubeで開いてください。',hint:'曲名を押すと次の曲になります',source:'YouTubeで開く',paused:'オフ',playing:'再生中',loading:'読み込み中',close:'閉じて音楽を停止',blocked:'プレーヤーの再生ボタンを押してください。',note:'Ghibli · Piano covers'},
+const copy = {
+ vi:{next:'Đổi bài nhạc',on:'Bật nhạc nền',off:'Tắt nhạc nền',empty:'Chờ thêm nhạc',hint:'Bấm tên bài để đổi nhạc',playing:'Đang phát',paused:'Đang tắt',loading:'Đang tải',error:'Không phát được bài này'},
+ en:{next:'Next track',on:'Play music',off:'Pause music',empty:'Music coming soon',hint:'Click the title for the next track',playing:'Playing',paused:'Off',loading:'Loading',error:'Unable to play this track'},
+ ja:{next:'次の曲',on:'BGMをオン',off:'BGMをオフ',empty:'音楽を準備中',hint:'曲名を押すと次の曲になります',playing:'再生中',paused:'オフ',loading:'読み込み中',error:'再生できません'},
 };
-function saved(key,fallback){try{return localStorage.getItem(key)??fallback;}catch{return fallback;}}
 export default function MusicPlayer({lang}) {
- const t=copy[lang];
- const [index,setIndex]=useState(()=>Math.max(0,tracks.findIndex(p=>p.id===saved('duyen-track','howl-piano'))));
- const [playing,setPlaying]=useState(false),[pending,setPending]=useState(false),[error,setError]=useState(false),[blocked,setBlocked]=useState(false);
- const [enabled,setEnabled]=useState(false);
- const [volume,setVolume]=useState(()=>{const n=Number(saved('duyen-volume','0.25'));return Number.isFinite(n)?Math.min(.7,Math.max(.05,n)):.25;});
- const player=useRef(null),host=useRef(null),root=useRef(null);
- const ready=useRef(false);
- const active=useRef(index),volumeRef=useRef(volume),intent=useRef(false),selectRef=useRef(null),position=useRef({});
+ const t=copy[lang], audio=useRef(null), intent=useRef(false);
+ const [index,setIndex]=useState(()=>{try{return Math.max(0,tracks.findIndex(p=>p.id===localStorage.getItem('duyen-track')));}catch{return 0;}});
+ const [playing,setPlaying]=useState(false),[pending,setPending]=useState(false),[error,setError]=useState(false);
  const track=tracks[index];
- function stop() {
-  intent.current=false;
-  try {if(player.current?.getCurrentTime)position.current[active.current]=player.current.getCurrentTime();player.current?.destroy();}catch{}
-  player.current=null;ready.current=false;setPlaying(false);setPending(false);setEnabled(false);setBlocked(false);
- }
- function start(){intent.current=true;setError(false);setBlocked(false);setPending(true);setEnabled(true);}
- function select(next,shouldPlay=false) {
-  active.current=next;setIndex(next);setError(false);setBlocked(false);
-  try{localStorage.setItem('duyen-track',tracks[next].id);}catch{}
-  if(ready.current && player.current?.loadVideoById && intent.current){setPending(true);setPlaying(false);player.current.loadVideoById(tracks[next].videoId);}
-  else if(shouldPlay)start();
- }
- selectRef.current=select;
+ async function play(){if(!audio.current||!track)return;intent.current=true;setPending(true);setError(false);try{await audio.current.play();}catch{intent.current=false;setError(true);setPending(false);}}
+ function pause(){intent.current=false;audio.current?.pause();setPending(false);}
+ function next(){if(tracks.length<2)return;setIndex(i=>(i+1)%tracks.length);}
  useEffect(()=>{
-  volumeRef.current=volume;player.current?.setVolume?.(Math.round(volume*100));
-  try{localStorage.setItem('duyen-volume',String(volume));}catch{}
- },[volume]);
- useEffect(()=>{
-  if(!enabled)return;
-  let disposed=false;
-  loadYouTubeApi().then(YT=>{
-   if(disposed||!host.current||!intent.current)return;
-   const mount=document.createElement('div');host.current.replaceChildren(mount);
-   player.current=new YT.Player(mount,{
-    width:'100%',height:'200',videoId:tracks[active.current].videoId,
-    playerVars:{autoplay:0,playsinline:1,controls:1,enablejsapi:1,origin:location.origin,start:Math.floor(position.current[active.current]||0)},
-    events:{
-     onReady:e=>{if(disposed)return;ready.current=true;e.target.setVolume(Math.round(volumeRef.current*100));if(intent.current)e.target.loadVideoById({videoId:tracks[active.current].videoId,startSeconds:Math.floor(position.current[active.current]||0)});},
-     onStateChange:e=>{if(disposed)return;setPlaying(e.data===1);if(e.data===1||e.data===2)setPending(false);if(e.data===3)setPending(true);if(e.data===0&&intent.current)selectRef.current((active.current+1)%tracks.length);},
-     onError:e=>{if(disposed)return;console.warn("YouTube player error",e.data);setError(true);setPending(false);setPlaying(false);},
-     onAutoplayBlocked:()=>{if(disposed)return;setBlocked(true);setPending(false);setPlaying(false);},
-    },
-   });
-  }).catch(()=>{if(!disposed){setError(true);setPending(false);}});
-  return()=>{disposed=true;try{player.current?.destroy();}catch{}player.current=null;ready.current=false;};
- },[enabled]);
- return <><div className="nav-music" data-playing={playing} ref={root}>
-  <button type="button" className="music-box" onClick={()=>select((index+1)%tracks.length)} aria-label={`${t.next}: ${track.title}`} title={t.hint}><span className="music-record" aria-hidden="true"><Music2 size={16}/></span><span className="music-caption"><strong>{track.title}</strong><small>{pending?t.loading:playing?t.playing:t.paused}</small></span><span className="music-bars" aria-hidden="true"><i/><i/><i/></span></button>
-  <button type="button" className="icon-button music-toggle" aria-label={enabled?t.off:t.on} aria-pressed={enabled} onClick={()=>enabled?stop():start()}>{pending?<LoaderCircle className="music-spinner" size={18}/>:enabled?<Volume2 size={18}/>:<VolumeX size={18}/>}</button>
- </div>
-  {enabled&&document.getElementById('music-stage')&&createPortal(<section className="music-stage-inner" aria-label={t.list}>
-   <div className="youtube-host" ref={host}/>
-   <div className="music-stage-info"><small>{t.note}</small><strong>{track.title}</strong><span>{track.artist}</span>
-    {(error||blocked)&&<p className="youtube-notice" role="status">{error?t.error:t.blocked}</p>}
-    <label className="music-volume">{t.volume}<input type="range" min="0.05" max="0.7" step="0.05" value={volume} onChange={e=>setVolume(Number(e.target.value))}/></label>
-    <a href={`https://www.youtube.com/watch?v=${track.videoId}`} target="_blank" rel="noopener noreferrer">{t.source}<ExternalLink size={12}/></a>
-   </div>
-   <button type="button" className="icon-button" onClick={stop} aria-label={t.close}><X size={18}/></button>
-  </section>,document.getElementById('music-stage'))}
- </>;
+  if(!track)return;
+  try{localStorage.setItem('duyen-track',track.id);}catch{}
+  audio.current.volume=.25;
+  if(intent.current)play();
+ },[index]);
+ useEffect(()=>()=>{intent.current=false;},[]);
+ const status=error?t.error:pending?t.loading:playing?t.playing:t.paused;
+ return <div className="nav-music" data-playing={playing}>
+  <button type="button" className="music-box" disabled={!track} onClick={next} aria-label={track?`${t.next}: ${track.title}`:t.empty} title={track?t.hint:t.empty}>
+   <span className="music-record" aria-hidden="true"><Music2 size={16}/></span>
+   <span className="music-caption"><strong>{track?.title||t.empty}</strong><small role="status">{track?status:'—'}</small></span>
+   <span className="music-bars" aria-hidden="true"><i/><i/><i/></span>
+  </button>
+  <button type="button" className="icon-button music-toggle" disabled={!track} aria-label={playing||pending?t.off:t.on} aria-pressed={playing||pending} onClick={()=>playing||pending?pause():play()}>{pending?<LoaderCircle className="music-spinner" size={18}/>:playing?<Volume2 size={18}/>:<VolumeX size={18}/>}</button>
+  {track&&<audio key={track.id} ref={audio} src={track.src} preload="none" onPlaying={()=>{setPlaying(true);setPending(false);}} onPause={()=>setPlaying(false)} onWaiting={()=>setPending(true)} onError={()=>{setError(true);setPending(false);setPlaying(false);}} onEnded={()=>{if(tracks.length>1)next();else if(intent.current){audio.current.currentTime=0;play();}}}/>}
+ </div>;
 }

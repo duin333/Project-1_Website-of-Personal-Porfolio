@@ -1,4 +1,3 @@
-export const tracks = [
- {id:'howl-piano',title:'Merry-Go-Round of Life',artist:'Animenz Piano Sheets',film:"Howl’s Moving Castle · Piano cover",videoId:'lB4PRX737-0'},
- {id:'wind-piano',title:'Path of the Wind',artist:'PianoDeuss',film:'My Neighbor Totoro · Piano cover',videoId:'GlFGmFyJuG0'},
-];
+// Add the owner's supplied audio files under public/music, then list them here.
+// Example: { id: 'chill-01', title: 'Track title', artist: 'Performer', src: '/music/chill-01.mp3' }
+export const tracks = [];

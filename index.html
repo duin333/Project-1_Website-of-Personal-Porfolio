@@ -21,12 +21,7 @@
     <title>Duyên — Project Archive</title>
     <script>
       try {
-        const t = localStorage.getItem("duyen-theme");
-        document.documentElement.dataset.theme =
-          t === "dark" ||
-          (!t && matchMedia("(prefers-color-scheme: dark)").matches)
-            ? "dark"
-            : "light";
+        document.documentElement.dataset.theme = "light";
       } catch {}
     </script>
   </head>

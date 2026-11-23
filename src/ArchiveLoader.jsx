@@ -13,10 +13,10 @@ export default function ArchiveLoader({ lang, done, reduced }) {
     document.body.style.overflow = "hidden";
     let stopped = false;
     let exitTimer;
-    const maximum = setTimeout(finish, 2200);
+    const maximum = setTimeout(finish, 2800);
     const ready = Promise.all([
       document.fonts?.ready || Promise.resolve(),
-      new Promise(resolve => setTimeout(resolve, reduced ? 0 : 850)),
+      new Promise(resolve => setTimeout(resolve, 2500)),
     ]);
     function finish() {
       if (stopped) return;
