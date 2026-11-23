@@ -2,6 +2,10 @@
 
 Portfolio cá nhân của Nguyễn Thái Kỳ Duyên. Concept folder tương tác, màu xanh dương/xanh lá, Việt–Anh–Nhật, hai theme sáng/tối và responsive.
 
+**Live:** https://duin333-portfolio.pages.dev/
+
+Cloudflare Pages đang kết nối trực tiếp repo này, production branch `main`. Push lên `main` sẽ tự build và deploy. Build command: `npm run build`; output: `dist`; biến môi trường build `NODE_VERSION=22`. Tên miền riêng sẽ bổ sung sau khi đăng ký và cấu hình DNS thành công.
+
 ## Chạy tại máy
 
 Yêu cầu Node.js 22.12+ (đã kiểm tra với Node 24) và npm.
@@ -45,7 +49,7 @@ npm run preview
 
 ### Git integration
 
-1. Đưa source lên repo GitHub. Nếu dùng repo portfolio cũ, chọn nhánh `portfolio-v2`.
+1. Đưa source lên repo GitHub. Bản v2 đã được merge vào `main`; chọn `main` làm production branch.
 2. Cloudflare Dashboard → Workers & Pages → tạo ứng dụng → chọn Pages → kết nối Git.
 3. Chọn repo/nhánh, build command `npm run build`, output directory `dist`, root directory để trống.
 4. Dùng Node 22 hoặc 24 cho môi trường build. Deploy, mở link `*.pages.dev`, thử cả URL chi tiết dự án.
