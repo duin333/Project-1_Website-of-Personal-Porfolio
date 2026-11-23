@@ -40,7 +40,7 @@ test("each project has complete translated details, unique ID, and a verified ro
       if (p.repo) assert.equal(new URL(p.repo).protocol, "https:");
     }
 });
-test("project links round-trip in every language and invalid routes do not open dialogs", () => {
+test("project links round-trip in every language and invalid routes do not select projects", () => {
   for (const lang of languages) {
     assert.deepEqual(readRoute(projectRoute(lang)), { lang, project: null });
     for (const p of projects)
@@ -58,3 +58,14 @@ test("project links round-trip in every language and invalid routes do not open 
   });
 });
 
+test("clean project paths and legacy shared links resolve to the same project", () => {
+  for (const lang of languages) for (const p of projects) {
+    assert.equal(projectRoute(lang,p.id), `/${lang}/projects/${p.id}`);
+    assert.deepEqual(readRoute(`/${lang}/projects/${p.id}`), readRoute(`#/${lang}/projects/${p.id}`));
+  }
+  for (const lang of languages) {
+    assert.equal(copy[lang].b2,"B2");
+    assert.equal(copy[lang].n4,"N4");
+    assert.equal(copy[lang].gpaNote,"3.41/4.00");
+  }
+});

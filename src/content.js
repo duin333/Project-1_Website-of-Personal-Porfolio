@@ -392,7 +392,7 @@ export const projects = [
       highlights: [
         "Nội dung Việt, Anh, Nhật; lựa chọn ngôn ngữ và theme được lưu trên trình duyệt.",
         "Folder tương tác, chi tiết dự án có URL chia sẻ, lọc Web/Mobile và bố cục thích ứng màn hình.",
-        "Điều hướng bàn phím, khôi phục focus khi đóng chi tiết, hỗ trợ giảm chuyển động và bật/tắt hiệu ứng chuột.",
+        "Trang dự án riêng, điều hướng bàn phím, hỗ trợ giảm chuyển động và bật/tắt hiệu ứng chuột.",
       ],
       next: "Tiếp nhận phản hồi và bổ sung ảnh ứng dụng thực tế. Portfolio đã chạy tại duin333.dpdns.org với Cloudflare DNS, Pages và HTTPS; push lên main sẽ tự build và deploy.",
     },
@@ -405,7 +405,7 @@ export const projects = [
       highlights: [
         "Vietnamese, English, and Japanese content; language and theme choices persist in the browser.",
         "Interactive folders, shareable project detail URLs, Web/Mobile filtering, and responsive layouts.",
-        "Keyboard navigation, restored focus on closing details, reduced motion support, and optional pointer effects.",
+        "Dedicated project pages, keyboard navigation, reduced motion support, and optional pointer effects.",
       ],
       next: "Gather feedback and add actual application screenshots. The portfolio is live at duin333.dpdns.org with Cloudflare DNS, Pages, and HTTPS; pushes to main automatically build and deploy.",
     },
@@ -418,7 +418,7 @@ export const projects = [
       highlights: [
         "ベトナム語・英語・日本語に対応し、言語とテーマの設定をブラウザーに保存します。",
         "操作できるフォルダー、共有できる詳細URL、Web・モバイルの絞り込み、レスポンシブ対応。",
-        "キーボード操作、詳細を閉じた後のフォーカス復元、動きを減らす設定、マウス効果の切り替え。",
+        "独立したプロジェクトページ、キーボード操作、動きを減らす設定、マウス効果の切り替え。",
       ],
       next: "フィードバックを反映し、実際の画面を追加します。Cloudflare DNS、Pages、HTTPSを使い、duin333.dpdns.orgで公開中です。mainへのpushで自動ビルド・デプロイします。",
     },
@@ -475,7 +475,7 @@ export const projects = [
 ];
 
 export function readRoute(hash = "") {
-  const match = hash.match(/^#\/(vi|en|ja)(?:\/projects\/([a-z0-9-]+))?$/);
+  const match = hash.match(/^#?\/(vi|en|ja)(?:\/projects\/([a-z0-9-]+))?\/?$/);
   return match
     ? {
         lang: match[1],
@@ -484,7 +484,7 @@ export function readRoute(hash = "") {
     : null;
 }
 export function projectRoute(lang, id) {
-  return `#/${lang}${id ? `/projects/${id}` : ""}`;
+  return `/${lang}${id ? `/projects/${id}` : ""}`;
 }
 
 export const roles = {
@@ -519,8 +519,17 @@ for (const project of projects) {
   project.personal = detail.personal;
   for (const lang of languages) Object.assign(project[lang], detail[lang]);
 }
-projects.find(p => p.id === "foodgo").stack = ["Kotlin", "Android"];
+projects.find(p => p.id === "foodgo").stack = ["Kotlin", "Android", "XML", "ViewBinding"];
 for (const lang of languages) {
   roles.comichub[lang] = {vi: "Dự án cá nhân · Fullstack Developer", en: "Individual project · Fullstack Developer", ja: "個人開発 · フルスタックエンジニア"}[lang];
   roles.musicbox[lang] = roles.comichub[lang];
+}
+
+for (const lang of languages) {
+  Object.assign(copy[lang], {
+    b2: "B2", n4: "N4",
+    back: {vi: "Tất cả dự án", en: "All projects", ja: "すべてのプロジェクト"}[lang],
+    contents: {vi: "Trong hồ sơ này", en: "In this project", ja: "このプロジェクト"}[lang],
+  });
+  roles.foodgo[lang] = {vi: "Dự án nhóm · phát triển chính luồng Tài xế", en: "Team project · Driver workflow lead", ja: "チーム開発 · ドライバー側のメイン開発者"}[lang];
 }

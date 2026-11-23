@@ -2767,3 +2767,88 @@ h2 {
 .project-facts dd { margin:0; font-size:1rem; line-height:1.7; }
 .case-study-note { border-left:3px solid var(--blue); padding-left:20px; }
 @media(max-width:700px) { .journey-grid { grid-template-columns:1fr; gap:24px; } .project-facts { grid-template-columns:1fr; } .journey-section { padding-top:40px; padding-bottom:40px; } }
+
+/* Full-page project dossiers */
+.project-page { max-width:1180px; margin:0 auto; padding:45px 40px 80px; }
+.case-breadcrumb { display:flex; align-items:center; justify-content:space-between; gap:20px; padding-bottom:40px; font-size:.875rem; color:var(--muted); }
+.case-breadcrumb a { display:flex; align-items:center; gap:10px; color:var(--blue); min-height:44px; }
+.case-heading { max-width:1000px; margin-bottom:40px; }
+.case-kicker { display:flex; align-items:center; gap:24px; font-size:.875rem; color:var(--muted); }
+.case-kicker>span:first-child { color:var(--blue); }
+.case-heading h1 { font-family:"Playfair Display","Noto Sans JP",serif; font-size:clamp(4rem,9vw,8rem); line-height:1.12; font-weight:400; color:var(--blue); letter-spacing:-.055em; margin:20px 0; outline:none; }
+.case-heading h1>span { font-family:"Be Vietnam Pro",sans-serif; display:inline-block; color:var(--ink); font-size:.5em; vertical-align:top; margin:10px 0 0 22px; }
+.case-heading>p { max-width:760px; font-size:clamp(1.125rem,2vw,1.4rem); line-height:1.8; color:var(--muted); }
+.case-heading-actions { display:flex; align-items:center; gap:35px; flex-wrap:wrap; margin-top:24px; }
+.case-heading-actions .status { margin:0; }
+.case-cover { margin:0 0 60px; }
+.case-cover>.project-art { height:420px; border-radius:12px; overflow:hidden; }
+.case-cover figcaption { color:var(--muted); font-size:.875rem; margin-top:12px; }
+.case-cover .comic-covers { height:275px; }
+.case-cover .comic-covers span { font-size:38px; }
+.case-cover .music-room { margin-top:30px; }
+.case-cover .music-room strong { font-size:clamp(2.5rem,5vw,4rem); }
+.case-cover .sound-bars { height:120px; }
+.case-cover .food-phone { width:190px; height:360px; right:18%; top:38px; }
+.case-cover .food-map { height:220px; }
+.case-cover .food-wordmark { font-size:clamp(3rem,7vw,6rem); }
+.case-cover .food-sticker { left:12%; bottom:35px; }
+.case-layout { display:grid; grid-template-columns:260px minmax(0,1fr); gap:75px; align-items:start; }
+.case-sidebar { position:sticky; top:115px; font-size:1rem; }
+.case-role { display:flex; align-items:flex-start; gap:12px; border-bottom:1px solid var(--line); padding-bottom:24px; margin-bottom:24px; line-height:1.7; }
+.case-role svg { margin-top:4px; color:var(--blue); }
+.case-sidebar dt { color:var(--muted); font-size:.875rem; margin-bottom:8px; }
+.case-sidebar dd { margin:0; line-height:1.7; }
+.case-sidebar h2 { font-size:.875rem; color:var(--muted); font-weight:500; margin:28px 0 14px; }
+.case-sidebar .tags { gap:8px; }
+.case-sidebar .tags>span { font-size:.875rem; line-height:1.5; }
+.case-sidebar nav { border-top:1px solid var(--line); margin-top:28px; }
+.case-sidebar nav a { display:block; padding:8px 0; line-height:1.6; }
+.case-sidebar nav a:hover { color:var(--blue); }
+.case-story section { padding-bottom:38px; margin-bottom:38px; border-bottom:1px solid var(--line); scroll-margin-top:110px; }
+.case-story h2 { font-family:"Playfair Display","Noto Sans JP",serif; font-size:clamp(1.7rem,3vw,2.3rem); font-weight:400; margin-bottom:20px; line-height:1.4; }
+.case-story p,.case-story li { font-size:1rem; line-height:1.95; color:var(--muted); }
+.case-story ul { padding-left:20px; margin:0; }
+.case-story li { padding-left:5px; margin-bottom:14px; }
+.case-pagination { display:grid; grid-template-columns:1fr 1fr; gap:25px; border-top:1px solid var(--line); margin-top:40px; padding-top:30px; }
+.case-pagination a { padding:24px; border:1px solid var(--line); border-radius:8px; transition:background .2s; }
+.case-pagination a:hover { background:var(--surface); }
+.case-pagination a:last-child { text-align:right; }
+.case-pagination span { display:block; color:var(--muted); font-size:.875rem; margin-bottom:12px; }
+.case-pagination strong { font-family:"Playfair Display",serif; color:var(--blue); font-size:clamp(1.5rem,3vw,2.4rem); font-weight:400; }
+@media(max-width:850px) {
+ .project-page { padding:25px 24px 55px; }
+ .case-layout { grid-template-columns:1fr; gap:35px; }
+ .case-sidebar { position:static; display:grid; grid-template-columns:1fr 1fr; gap:0 24px; border-bottom:1px solid var(--line); padding-bottom:25px; }
+ .case-sidebar nav { display:none; }
+ .case-sidebar h2 { margin-top:0; }
+ .case-role { border:0; margin:0; }
+ .case-sidebar dl { margin:0 0 20px; }
+ .case-cover { margin-bottom:35px; }
+ .case-cover>.project-art { height:330px; }
+ .case-cover .comic-covers { height:210px; }
+ .case-cover .food-phone { height:290px; width:150px; top:20px; }
+ .case-cover .food-map { height:180px; }
+}
+@media(max-width:500px) {
+ .case-breadcrumb { padding-bottom:25px; }
+ .case-heading h1 { font-size:3.5rem; }
+ .case-heading h1>span { margin-left:12px; }
+ .case-kicker { gap:12px; flex-wrap:wrap; }
+ .case-heading-actions { gap:22px; }
+ .case-cover>.project-art { height:270px; }
+ .case-cover .comic-covers { height:150px; }
+ .case-cover .comic-covers span { font-size:18px; }
+ .case-cover .music-room strong { font-size:2rem; }
+ .case-cover .sound-bars { height:75px; }
+ .case-cover .food-phone { width:125px; height:235px; right:8%; }
+ .case-cover .food-map { height:140px; }
+ .case-cover .food-sticker { left:8%; width:80px; height:80px; font-size:18px; }
+ .case-cover .mini-portfolio strong { font-size:50px; }
+ .case-cover .mini-portfolio em { font-size:55px; }
+ .case-cover .mini-folders { right:10px; }
+ .case-cover .mini-folders i { width:75px; height:65px; }
+ .case-sidebar { grid-template-columns:1fr; gap:12px; }
+ .case-story section { padding-bottom:28px; margin-bottom:28px; }
+ .case-pagination { gap:12px; }
+ .case-pagination a { padding:16px; }
+}

@@ -1,5 +1,6 @@
+import ArchiveLoader from "./ArchiveLoader.jsx";
 import { linkedin } from "./profile.js";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import MotionEffects from "./MotionEffects.jsx";
 import Mascot from "./Mascot.jsx";
 import {
@@ -281,150 +282,47 @@ function Folder({ project, lang, t, hero = false, onOpen, index }) {
   );
 }
 
-function ProjectDialog({ project, lang, t, close, navigate, theme }) {
-  const dialogRef = useRef(null);
+function ProjectPage({ project, lang, t, close, navigate }) {
   const content = project[lang];
+  const title = useRef(null);
   useLayoutEffect(() => {
-    const d = dialogRef.current;
-    d.showModal();
-    const before = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = before;
-      d.close();
-    };
-  }, []);
-  useEffect(() => {
-    dialogRef.current?.querySelector(".dialog-scroll")?.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "instant" });
+    title.current?.focus({ preventScroll: true });
   }, [project.id]);
-  const index = projects.findIndex((p) => p.id === project.id);
-  return (
-    <dialog
-      className={`project-dialog ${project.color}`}
-      ref={dialogRef}
-      onCancel={(e) => {
-        e.preventDefault();
-        close();
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) close();
-      }}
-      aria-labelledby="project-dialog-title"
-      data-theme={theme}
-    >
-      <div className="dialog-top">
-        <span>
-          <FolderOpen size={17} /> archive / {project.id}
-        </span>
-        <button
-          className="icon-button"
-          onClick={close}
-          aria-label={t.close}
-          autoFocus
-        >
-          <X size={23} />
-        </button>
-      </div>
-      <div className="dialog-scroll" key={project.id}>
-        <div className="dialog-title">
-          <span className="eyebrow">{project.type}</span>
-          <h2 id="project-dialog-title">{project.name}</h2>
-          <p>{content.subtitle}</p>
-          <span className="status">
-            <span />
-            {t[project.status]}
-          </span>
-        </div>
-        <ProjectArt id={project.id} />
-        <p className="art-caption">{t.illustration}</p>
-        <div className="dialog-content">
-          <div className="project-role">
-            <Code2 size={18} />
-            <span>{roles[project.id][lang]}</span>
-          </div>
-          {project.period && <dl className="project-facts">
-            <div><dt>{t.period}</dt><dd>{project.period}</dd></div>
-            <div><dt>{t.scope}</dt><dd>{project.personal ? t.personal : t.teamSize}</dd></div>
-          </dl>}
-          <section>
-            <h3>{t.overview}</h3>
-            <p>{content.description}</p>
-          </section>
-          <section>
-            <h3>{t.technology}</h3>
-            <div className="tags">
-              {project.stack.length ? (
-                project.stack.map((s) => <span key={s}>{s}</span>)
-              ) : (
-                <span>Kotlin / Android *</span>
-              )}
-            </div>
-            {project.id === "foodgo" && (
-              <p className="small-note">
-                {lang === "vi"
-                  ? "Kotlin/Android theo xác nhận của mình; repo nhóm hiện chưa truy cập được để kiểm chứng các công nghệ khác."
-                  : lang === "ja"
-                    ? "Kotlin/Androidは本人の申告に基づきます。その他の技術はソース確認待ちです。"
-                    : "Kotlin/Android confirmed by the project owner; other technologies await access to the team repository."}
-              </p>
-            )}
-          </section>
-          <section>
-            <h3>{t.highlights}</h3>
-            <ul>
-              {content.highlights.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </section>
-          {content.challenge && <section className="case-study-note"><h3>{t.challenge}</h3><p>{content.challenge}</p></section>}
-          {content.outcome && <section><h3>{t.outcome}</h3><p>{content.outcome}</p></section>}
-          <section>
-            <h3>{t.next}</h3>
-            <p>{content.next}</p>
-          </section>
-          {project.id !== "portfolio" && <section><h3>{t.evidence}</h3><p className="small-note">{t.evidencePending}</p></section>}
-          {project.repo && (
-            <a
-              className="button primary"
-              href={project.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Github size={18} />
-              {t.source}
-            </a>
-          )}
-          <div className="dialog-pagination">
-            <button
-              onClick={() =>
-                navigate(
-                  projects[(index + projects.length - 1) % projects.length].id,
-                )
-              }
-              aria-label={t.prevProject}
-            >
-              <ChevronLeft size={18} />
-              {projects[(index + projects.length - 1) % projects.length].name}
-            </button>
-            <button
-              onClick={() =>
-                navigate(projects[(index + 1) % projects.length].id)
-              }
-              aria-label={t.nextProject}
-            >
-              {projects[(index + 1) % projects.length].name}
-              <ChevronRight size={18} />
-            </button>
-          </div>
-        </div>
-      </div>
-    </dialog>
-  );
+  const index = projects.findIndex(p => p.id === project.id);
+  const sections = [["overview",t.overview],["highlights",t.highlights], ...(content.challenge ? [["challenge",t.challenge]] : []), ...(content.outcome ? [["outcome",t.outcome]] : []), ["next",t.next]];
+  return <main id="main" className={`project-page ${project.color}`}>
+    <div className="case-breadcrumb"><a href={`${projectRoute(lang)}#projects`} onClick={e=>{if(!e.metaKey&&!e.ctrlKey){e.preventDefault();close();}}}><FolderOpen size={18}/>{t.back}</a><span>{project.name}</span></div>
+    <header className="case-heading">
+      <div className="case-kicker"><span>{project.type}</span><span>{project.period || "2026"}</span></div>
+      <h1 ref={title} tabIndex={-1}>{project.name}<span aria-hidden="true">✳</span></h1>
+      <p>{content.summary}</p>
+      <div className="case-heading-actions"><span className="status"><span/>{t[project.status]}</span><a className="text-link" href={project.repo} target="_blank" rel="noopener noreferrer"><Github size={18}/>{t.source}</a></div>
+    </header>
+    <figure className="case-cover"><ProjectArt id={project.id}/><figcaption>{t.illustration}</figcaption></figure>
+    <div className="case-layout">
+      <aside className="case-sidebar">
+        <div className="case-role"><Code2 size={20}/><p>{roles[project.id][lang]}</p></div>
+        {project.period && <dl><dt>{t.scope}</dt><dd>{project.personal ? t.personal : t.teamSize}</dd></dl>}
+        <h2>{t.technology}</h2><div className="tags">{project.stack.map(item=><span key={item}>{item}</span>)}</div>
+        <nav aria-label={t.contents}><h2>{t.contents}</h2>{sections.map(([id,label])=><a key={id} href={`#${id}`}>{label}</a>)}</nav>
+      </aside>
+      <article className="case-story">
+        <section id="overview"><h2>{t.overview}</h2><p>{content.description}</p></section>
+        <section id="highlights"><h2>{t.highlights}</h2><ul>{content.highlights.map(item=><li key={item}>{item}</li>)}</ul></section>
+        {content.challenge && <section id="challenge"><h2>{t.challenge}</h2><p>{content.challenge}</p></section>}
+        {content.outcome && <section id="outcome"><h2>{t.outcome}</h2><p>{content.outcome}</p></section>}
+        <section id="next"><h2>{t.next}</h2><p>{content.next}</p></section>
+      </article>
+    </div>
+    <nav className="case-pagination" aria-label={t.nextProject}>
+      {[[-1,t.prevProject],[1,t.nextProject]].map(([offset,label])=>{const p=projects[(index+offset+projects.length)%projects.length];return <a href={projectRoute(lang,p.id)} key={offset} onClick={e=>{if(!e.metaKey&&!e.ctrlKey){e.preventDefault();navigate(p.id);}}}><span>{label}</span><strong>{p.name}</strong></a>;})}
+    </nav>
+  </main>;
 }
 
 export default function App() {
-  const initial = readRoute(location.hash);
+  const initial = readRoute(location.hash) || readRoute(location.pathname);
   const [lang, setLang] = useState(
     initial?.lang ||
       (languages.includes(saved("duyen-lang", "vi"))
@@ -443,12 +341,18 @@ export default function App() {
   const [menu, setMenu] = useState(false);
   const [filter, setFilter] = useState("all");
   const [toast, setToast] = useState("");
-  const opener = useRef(null);
+  const homeScroll = useRef(0);
+  const [loading, setLoading] = useState(() => { try { return !sessionStorage.getItem("duyen-intro-seen"); } catch { return true; } });
+  const finishLoading = useCallback(() => { try { sessionStorage.setItem("duyen-intro-seen", "1"); } catch {} setLoading(false); }, []);
   const toastTimer = useRef(null);
   const t = copy[lang];
   useEffect(() => {
+    const legacy = readRoute(location.hash);
+    if (legacy) history.replaceState(null, "", projectRoute(legacy.lang, legacy.project));
+  }, []);
+  useEffect(() => {
     const change = () => {
-      const r = readRoute(location.hash);
+      const r = readRoute(location.hash) || readRoute(location.pathname);
       if (r) {
         setLang(r.lang);
         setActiveProject(r.project);
@@ -467,7 +371,8 @@ export default function App() {
     document.title = `${activeProject ? projects.find((p) => p.id === activeProject)?.name + " · " : ""}Duyên — Project Archive`;
     document
       .querySelector('meta[name="description"]')
-      ?.setAttribute("content", t.heroDescription);
+      ?.setAttribute("content", activeProject ? projects.find(p=>p.id===activeProject)[lang].summary : t.heroDescription);
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", `https://duin333.dpdns.org${projectRoute(lang,activeProject)}`);
   }, [lang, activeProject, t.heroDescription]);
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -498,28 +403,29 @@ export default function App() {
     addEventListener("keydown", esc);
     return () => removeEventListener("keydown", esc);
   }, [menu]);
-  function openProject(id, element) {
-    opener.current = element || document.activeElement;
+  function openProject(id) {
+    homeScroll.current = window.scrollY;
     setMenu(false);
     setActiveProject(id);
     history.pushState({ project: id }, "", projectRoute(lang, id));
   }
-  function closeProject() {
+  function goHome(section = "home") {
     setActiveProject(null);
-    history.replaceState(null, "", projectRoute(lang));
-    requestAnimationFrame(() =>
-      opener.current?.isConnected
-        ? opener.current.focus()
-        : document.getElementById("projects-title")?.focus(),
-    );
+    setMenu(false);
+    history.pushState(null, "", `${projectRoute(lang)}#${section}`);
+    requestAnimationFrame(() => {
+      if (section === "projects" && homeScroll.current) window.scrollTo({top: homeScroll.current, behavior:"instant"});
+      else document.getElementById(section)?.scrollIntoView({behavior:"instant"});
+    });
   }
+  function closeProject() { goHome("projects"); }
   function changeLanguage(value) {
     setLang(value);
     history.replaceState(null, "", projectRoute(value, activeProject));
   }
   function navigateProject(id) {
     setActiveProject(id);
-    history.replaceState({ project: id }, "", projectRoute(lang, id));
+    history.pushState({ project: id }, "", projectRoute(lang, id));
   }
   async function copyEmail() {
     let message;
@@ -538,6 +444,8 @@ export default function App() {
   );
   return (
     <>
+      {loading && <ArchiveLoader lang={lang} done={finishLoading} reduced={effectsMode === "off" || (effectsMode !== "on" && matchMedia("(prefers-reduced-motion: reduce)").matches)}/>}
+      <div inert={loading ? true : undefined}>
       <a className="skip-link" href="#main">
         {t.skip}
       </a>
@@ -546,15 +454,16 @@ export default function App() {
         enabled={effects}
         force={effectsMode === "on"}
         lang={lang}
-        modalOpen={Boolean(activeProject)}
+        key={activeProject || "home"}
+        modalOpen={loading}
       />
       <Mascot
         lang={lang}
         mode={effectsMode}
-        concealed={Boolean(activeProject) || menu}
+        concealed={loading || menu}
       />
       <header className="site-header">
-        <a className="wordmark" href="#home" aria-label="Duyên — home">
+        <a className="wordmark" href={`${projectRoute(lang)}#home`} onClick={e=>{e.preventDefault();goHome("home");}} aria-label="Duyên — home">
           duyên<span className="logo-star">✳</span>
         </a>
         <nav
@@ -571,8 +480,8 @@ export default function App() {
           {t.nav.map((n, i) => (
             <a
               key={i}
-              href={`#${["projects", "about", "contact"][i]}`}
-              onClick={() => setMenu(false)}
+              href={`${projectRoute(lang)}#${["projects", "about", "contact"][i]}`}
+              onClick={e=>{e.preventDefault();goHome(["projects", "about", "contact"][i]);}}
             >
               {n}
               <span>0{i + 1}</span>
@@ -649,7 +558,7 @@ export default function App() {
           </button>
         </div>
       </header>
-      <main id="main">
+      {activeProject ? <ProjectPage project={projects.find(p=>p.id===activeProject)} lang={lang} t={t} close={closeProject} navigate={navigateProject}/> : <main id="main">
         <section id="home" className="hero">
           <div className="hero-kicker">
             <span>
@@ -882,7 +791,7 @@ export default function App() {
           <h2 id="journey-title">{t.journeyTitle}</h2>
           <div className="journey-grid">
             <article className="education-entry"><span className="journey-meta">2024–2028</span><h3>UTE · {t.education}</h3><p>{t.educationValue}</p><p>{t.educationNote}</p><strong>{t.gpaNote}</strong></article>
-            <div className="community-list">{[["BBE",t.bbe],["DSUC",t.dsuc],["GDGoC-DUT",t.gdg]].map(([name,description])=><article key={name}><h3>{name}</h3><p>{description}</p></article>)}<p className="small-note">{t.communityNote}</p></div>
+            <div className="community-list">{[["GDGoC-DUT",t.gdg],["DSUC",t.dsuc],["BBE",t.bbe]].map(([name,description])=><article key={name}><h3>{name}</h3><p>{description}</p></article>)}<p className="small-note">{t.communityNote}</p></div>
           </div>
         </section>
         <section className="tools-section section-wrap">
@@ -990,9 +899,9 @@ export default function App() {
             </div>
           </div>
         </section>
-      </main>
+      </main>}
       <footer className="site-footer">
-        <a className="wordmark" href="#home">
+        <a className="wordmark" href={`${projectRoute(lang)}#home`} onClick={e=>{e.preventDefault();goHome("home");}}>
           duyên<span className="logo-star">✳</span>
         </a>
         <p>
@@ -1019,7 +928,7 @@ export default function App() {
               <option value="off">FX OFF</option>
             </select>
           </label>
-          <a className="icon-button" href="#home" aria-label={t.top}>
+          <a className="icon-button" href={`${projectRoute(lang)}#home`} onClick={e=>{e.preventDefault();goHome("home");}} aria-label={t.top}>
             <ArrowUp size={22} />
           </a>
         </div>
@@ -1027,16 +936,7 @@ export default function App() {
       <div className="toast" role="status" aria-live="polite">
         {toast && <span>{toast}</span>}
       </div>
-      {activeProject && (
-        <ProjectDialog
-          project={projects.find((p) => p.id === activeProject)}
-          lang={lang}
-          t={t}
-          close={closeProject}
-          navigate={navigateProject}
-          theme={theme}
-        />
-      )}
+      </div>
     </>
   );
 }
