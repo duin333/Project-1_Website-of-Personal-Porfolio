@@ -1,3 +1,4 @@
+import { profileCopy, projectDetails } from "./profile.js";
 export const languages = ["vi", "en", "ja"];
 export const email = "duyennguyenthaiky@gmail.com";
 export const github = "https://github.com/duin333";
@@ -508,3 +509,18 @@ export const roles = {
     ja: "チーム開発 · ドライバー側とリアルタイム機能のメイン開発者",
   },
 };
+
+// Profile facts are supplied by the owner; engineering details are source-reviewed.
+for (const lang of languages) Object.assign(copy[lang], profileCopy[lang]);
+for (const project of projects) {
+  const detail = projectDetails[project.id];
+  if (!detail) continue;
+  project.period = detail.period;
+  project.personal = detail.personal;
+  for (const lang of languages) Object.assign(project[lang], detail[lang]);
+}
+projects.find(p => p.id === "foodgo").stack = ["Kotlin", "Android"];
+for (const lang of languages) {
+  roles.comichub[lang] = {vi: "Dự án cá nhân · Fullstack Developer", en: "Individual project · Fullstack Developer", ja: "個人開発 · フルスタックエンジニア"}[lang];
+  roles.musicbox[lang] = roles.comichub[lang];
+}

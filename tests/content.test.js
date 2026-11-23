@@ -34,6 +34,7 @@ test("each project has complete translated details, unique ID, and a verified ro
       for (const key of ["subtitle", "summary", "description", "next"])
         assert.ok(p[lang][key]?.trim(), `${p.id}.${lang}.${key}`);
       assert.equal(p[lang].highlights.length, 3);
+      if (p.period) for (const key of ["challenge", "outcome"]) assert.ok(p[lang][key]?.trim(), `${p.id}.${lang}.${key}`);
       assert.ok(roles[p.id][lang].trim());
       assert.ok(copy[lang][p.status]);
       if (p.repo) assert.equal(new URL(p.repo).protocol, "https:");
@@ -56,3 +57,4 @@ test("project links round-trip in every language and invalid routes do not open 
     project: null,
   });
 });
+

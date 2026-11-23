@@ -1,3 +1,4 @@
+import { linkedin } from "./profile.js";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import MotionEffects from "./MotionEffects.jsx";
 import Mascot from "./Mascot.jsx";
@@ -341,6 +342,10 @@ function ProjectDialog({ project, lang, t, close, navigate, theme }) {
             <Code2 size={18} />
             <span>{roles[project.id][lang]}</span>
           </div>
+          {project.period && <dl className="project-facts">
+            <div><dt>{t.period}</dt><dd>{project.period}</dd></div>
+            <div><dt>{t.scope}</dt><dd>{project.personal ? t.personal : t.teamSize}</dd></div>
+          </dl>}
           <section>
             <h3>{t.overview}</h3>
             <p>{content.description}</p>
@@ -357,10 +362,10 @@ function ProjectDialog({ project, lang, t, close, navigate, theme }) {
             {project.id === "foodgo" && (
               <p className="small-note">
                 {lang === "vi"
-                  ? "* Theo README profile; chờ xác nhận từ repo nhóm."
+                  ? "Kotlin/Android theo xác nhận của mình; repo nhóm hiện chưa truy cập được để kiểm chứng các công nghệ khác."
                   : lang === "ja"
-                    ? "* プロフィールの記載に基づく情報。ソース確認待ち。"
-                    : "* Based on the profile README; awaiting source verification."}
+                    ? "Kotlin/Androidは本人の申告に基づきます。その他の技術はソース確認待ちです。"
+                    : "Kotlin/Android confirmed by the project owner; other technologies await access to the team repository."}
               </p>
             )}
           </section>
@@ -372,10 +377,13 @@ function ProjectDialog({ project, lang, t, close, navigate, theme }) {
               ))}
             </ul>
           </section>
+          {content.challenge && <section className="case-study-note"><h3>{t.challenge}</h3><p>{content.challenge}</p></section>}
+          {content.outcome && <section><h3>{t.outcome}</h3><p>{content.outcome}</p></section>}
           <section>
             <h3>{t.next}</h3>
             <p>{content.next}</p>
           </section>
+          {project.id !== "portfolio" && <section><h3>{t.evidence}</h3><p className="small-note">{t.evidencePending}</p></section>}
           {project.repo && (
             <a
               className="button primary"
@@ -808,18 +816,8 @@ export default function App() {
                 <span>DUIN333</span>
               </div>
               <div className="identity-art">
-                <div className="identity-grid" />
-                <span className="identity-monogram">
-                  d<span>✳</span>
-                </span>
-                <span className="identity-art-note">
-                  curious mind,
-                  <br />
-                  builder at heart.
-                </span>
-                <span className="identity-badge">
-                  <Code2 size={18} /> WEB & MOBILE
-                </span>
+                <img className="identity-photo" src="/images/duyen-portrait.jpg" alt="Nguyễn Thái Kỳ Duyên" width="2113" height="2065" loading="lazy" />
+                <span className="identity-photo-tag">FULLSTACK DEVELOPER</span>
               </div>
               <div className="identity-bottom">
                 <strong>
@@ -855,6 +853,8 @@ export default function App() {
                   <strong>{t.focusValue}</strong>
                 </div>
               </div>
+              <div className="profile-availability">{t.availability}</div>
+              <div className="about-facts"><div><span>{t.gpaLabel}</span><strong>{t.gpaNote}</strong></div><div><span>LinkedIn</span><a href={linkedin} target="_blank" rel="noopener noreferrer">Duyên Nguyễn · Evelyn</a></div></div>
               <div className="languages-block">
                 <h3>
                   <Globe2 size={17} />
@@ -875,6 +875,14 @@ export default function App() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+        <section className="journey-section section-wrap" aria-labelledby="journey-title">
+          <span className="eyebrow">{t.journeyLabel}</span>
+          <h2 id="journey-title">{t.journeyTitle}</h2>
+          <div className="journey-grid">
+            <article className="education-entry"><span className="journey-meta">2024–2028</span><h3>UTE · {t.education}</h3><p>{t.educationValue}</p><p>{t.educationNote}</p><strong>{t.gpaNote}</strong></article>
+            <div className="community-list">{[["BBE",t.bbe],["DSUC",t.dsuc],["GDGoC-DUT",t.gdg]].map(([name,description])=><article key={name}><h3>{name}</h3><p>{description}</p></article>)}<p className="small-note">{t.communityNote}</p></div>
           </div>
         </section>
         <section className="tools-section section-wrap">
@@ -952,6 +960,7 @@ export default function App() {
                   {email}
                 </a>
                 <div className="contact-actions">
+                  <a className="text-link" href={linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
                   <a className="button dark-button" href={`mailto:${email}`}>
                     <Mail size={18} />
                     {t.mail}
