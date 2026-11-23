@@ -525,15 +525,18 @@ export default function App() {
         </nav>
         <div className="header-controls">
           <MusicPlayer lang={lang}/>
-          <UISounds lang={lang}/>
           <LanguagePicker lang={lang} onChange={changeLanguage} label={t.language}/>
           <span className="control-divider" />
           <button
-            className="icon-button theme-toggle"
+            className="theme-switch"
+            role="switch"
+            aria-checked={theme === "dark"}
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
             aria-label={theme === "light" ? t.themeDark : t.themeLight}
           >
-            {theme === "light" ? <Moon size={19} /> : <Sun size={19} />}
+            <span className="theme-switch-thumb" aria-hidden="true"/>
+            <Sun size={16} aria-hidden="true"/>
+            <Moon size={16} aria-hidden="true"/>
           </button>
           <button
             className="icon-button motion-toggle"
@@ -880,6 +883,7 @@ export default function App() {
           <span>{t.footer}</span>
         </p>
         <div className="footer-actions">
+          <UISounds lang={lang}/>
           <label className="effects-control">
             <MousePointer2 size={17} />
             <select

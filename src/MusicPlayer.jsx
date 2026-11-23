@@ -18,7 +18,7 @@ export default function MusicPlayer({lang}) {
  useEffect(()=>{
   if(!track)return;
   try{localStorage.setItem('duyen-track',track.id);}catch{}
-  audio.current.volume=.25;
+  audio.current.volume=.5;
   if(intent.current)play();
  },[index]);
  useEffect(()=>{
