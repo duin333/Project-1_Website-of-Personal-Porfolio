@@ -17,7 +17,7 @@
   overflow: clip;
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: 1000;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s;
@@ -376,3 +376,7 @@
   transform: rotate(45deg);
   pointer-events: none;
 }
+
+/* Native pointer remains available over fixed navigation and its popovers. */
+:root[data-cursor="active"] .site-header { cursor:auto; }
+:root[data-cursor="active"] .site-header :is(a,button,summary,input[type="range"]) { cursor:pointer; }

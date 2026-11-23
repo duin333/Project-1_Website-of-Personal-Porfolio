@@ -1,3 +1,6 @@
+import MusicPlayer from "./MusicPlayer.jsx";
+import LanguagePicker from "./LanguagePicker.jsx";
+import "./nav-media.css";
 import Experience from "./Experience.jsx";
 import ContactSection from "./ContactSection.jsx";
 import "./journey-contact.css";
@@ -493,21 +496,8 @@ export default function App() {
           ))}
         </nav>
         <div className="header-controls">
-          <div className="language-switch" role="group" aria-label={t.language}>
-            {languages.map((l) => (
-              <button
-                key={l}
-                lang={l}
-                aria-label={
-                  { vi: "Tiếng Việt", en: "English", ja: "日本語" }[l]
-                }
-                aria-pressed={lang === l}
-                onClick={() => changeLanguage(l)}
-              >
-                {l === "ja" ? "JP" : l.toUpperCase()}
-              </button>
-            ))}
-          </div>
+          <MusicPlayer lang={lang}/>
+          <LanguagePicker lang={lang} onChange={changeLanguage} label={t.language}/>
           <span className="control-divider" />
           <button
             className="icon-button theme-toggle"
