@@ -52,13 +52,15 @@ export default function Experience({lang,t,onOpen,mode}) {
     nodes.forEach(node=>node.classList.remove("is-seen","is-reached","is-current"));
    };
   }
+  const resize = new ResizeObserver(()=>setup()); resize.observe(el);
   setup();preference.addEventListener("change",setup);
-  return ()=>{cleanup();preference.removeEventListener("change",setup);};
- },[mode]);
+  return ()=>{resize.disconnect();cleanup();preference.removeEventListener("change",setup);};
+ },[mode,lang]);
  const l=labels[lang];
  return <section id="experience" className="experience-section section-wrap" aria-labelledby="experience-title">
   <div className="section-heading"><div><span className="eyebrow">EXPERIENCE / EDUCATION</span><h2 id="experience-title">{l.title}</h2></div><p>{l.intro}</p></div>
   <ol className="journey-tree" ref={tree}>
+   <li className="journey-traveler" aria-hidden="true"/>
    <li className="journey-node education-node"><span className="tree-dot" aria-hidden="true"><GraduationCap size={18}/></span><article><div className="tree-meta"><time dateTime="2024-09">09/2024</time><span>{l.education}</span></div><h3>{l.school}</h3><p className="tree-role">{l.degree}</p><ul>{l.schoolPoints.map(p=><li key={p}>{p}</li>)}</ul></article></li>
    {Object.entries(details).map(([id,d])=><li className={`journey-node project-node ${id}`} key={id}><span className="tree-dot" aria-hidden="true"><Code2 size={17}/></span><article><div className="tree-meta"><span>{d.date}</span><span>{l.project}</span></div><h3><a href={projectRoute(lang,id)} onClick={e=>{if(!e.metaKey&&!e.ctrlKey){e.preventDefault();onOpen(id);}}}>{projects.find(p=>p.id===id).name}</a></h3><p className="tree-role">{d.role[lang]}</p><a className="journey-project-link" href={projectRoute(lang,id)} onClick={e=>{if(!e.metaKey&&!e.ctrlKey){e.preventDefault();onOpen(id);}}}>{l.view}</a></article></li>)}
    <li className="journey-node future-node"><span className="tree-dot" aria-hidden="true">✳</span><article><span className="future-loading" aria-label="Loading">LOADING <i/><i/><i/></span><h3>{l.future}</h3><p>{l.futureNote}</p></article></li>

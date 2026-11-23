@@ -351,6 +351,7 @@ export default function App() {
   const [filter, setFilter] = useState("all");
   const [toast, setToast] = useState("");
   const homeScroll = useRef(0);
+  const projectRail = useRef(null);
   const [loading, setLoading] = useState(() => { try { return !sessionStorage.getItem("duyen-intro-seen"); } catch { return true; } });
   const finishLoading = useCallback(() => { try { sessionStorage.setItem("duyen-intro-seen", "1"); } catch {} setLoading(false); }, []);
   const toastTimer = useRef(null);
@@ -711,7 +712,12 @@ export default function App() {
               {String(projects.length).padStart(2, "0")}
             </span>
           </div>
-          <div className="projects-grid">
+          <div className="project-slider-controls">
+            <span>{lang === 'vi' ? 'Kéo ngang để khám phá' : lang === 'ja' ? '横にスクロール' : 'Scroll to explore'}</span>
+            <div><button type="button" className="icon-button" aria-label={lang === 'vi' ? 'Dự án trước' : lang === 'ja' ? '前のプロジェクト' : 'Previous projects'} onClick={()=>projectRail.current?.scrollBy({left:-projectRail.current.clientWidth*.8,behavior:effects?'smooth':'instant'})}><ChevronLeft size={20}/></button>
+            <button type="button" className="icon-button" aria-label={lang === 'vi' ? 'Dự án tiếp theo' : lang === 'ja' ? '次のプロジェクト' : 'Next projects'} onClick={()=>projectRail.current?.scrollBy({left:projectRail.current.clientWidth*.8,behavior:effects?'smooth':'instant'})}><ChevronRight size={20}/></button></div>
+          </div>
+          <div className="projects-grid project-rail" ref={projectRail} tabIndex={0} role="region" aria-label={t.selected}>
             {filtered.map((p, i) => (
               <article key={p.id} className={`project-item ${p.color}`}>
                 <Folder

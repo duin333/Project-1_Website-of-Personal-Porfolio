@@ -11,6 +11,7 @@ import "@fontsource/noto-sans-jp/400.css";
 import "./styles.css";
 import "./motion.css";
 import "./wide-layout.css";
+import "./layout-polish.css";
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
