@@ -2,9 +2,11 @@
 
 Portfolio cá nhân của Nguyễn Thái Kỳ Duyên. Concept folder tương tác, màu xanh dương/xanh lá, Việt–Anh–Nhật, hai theme sáng/tối và responsive.
 
-**Live:** https://duin333-portfolio.pages.dev/
+**Live:** https://duin333.dpdns.org/
 
-Cloudflare Pages đang kết nối trực tiếp repo này, production branch `main`. Push lên `main` sẽ tự build và deploy. Build command: `npm run build`; output: `dist`; biến môi trường build `NODE_VERSION=22`. Tên miền riêng sẽ bổ sung sau khi đăng ký và cấu hình DNS thành công.
+**Cloudflare hostname:** https://duin333-portfolio.pages.dev/
+
+Cloudflare Pages đang kết nối trực tiếp repo này, production branch `main`. Push lên `main` sẽ tự build và deploy. Build command: `npm run build`; output: `dist`; biến môi trường build `NODE_VERSION=22`. Tên miền `duin333.dpdns.org` đã đăng ký miễn phí tại DigitalPlat, chuyển nameserver về Cloudflare và kiểm tra HTTPS thành công. Xem `docs/DEPLOYMENT.md` để biết cấu hình DNS và thông tin gia hạn.
 
 ## Chạy tại máy
 

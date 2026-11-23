@@ -380,8 +380,8 @@ export const projects = [
     color: "yellow",
     type: "WEB / INTERACTION",
     status: "building",
-    repo: "https://github.com/duin333/Project-1_Website-of-Personal-Porfolio/tree/portfolio-v2",
-    stack: ["React", "Vite", "CSS", "JavaScript"],
+    repo: "https://github.com/duin333/Project-1_Website-of-Personal-Porfolio",
+    stack: ["React", "Vite", "CSS", "JavaScript", "Cloudflare Pages"],
     vi: {
       subtitle: "Một nơi cho những điều mình đang xây.",
       summary:
@@ -393,7 +393,7 @@ export const projects = [
         "Folder tương tác, chi tiết dự án có URL chia sẻ, lọc Web/Mobile và bố cục thích ứng màn hình.",
         "Điều hướng bàn phím, khôi phục focus khi đóng chi tiết, hỗ trợ giảm chuyển động và bật/tắt hiệu ứng chuột.",
       ],
-      next: "Tiếp nhận phản hồi, bổ sung ảnh ứng dụng thực tế và triển khai tên miền riêng với HTTPS. Mã nguồn bản mới được lưu trên nhánh portfolio-v2 của repo portfolio.",
+      next: "Tiếp nhận phản hồi và bổ sung ảnh ứng dụng thực tế. Portfolio đã chạy tại duin333.dpdns.org với Cloudflare DNS, Pages và HTTPS; push lên main sẽ tự build và deploy.",
     },
     en: {
       subtitle: "A home for the things I’m building.",
@@ -406,7 +406,7 @@ export const projects = [
         "Interactive folders, shareable project detail URLs, Web/Mobile filtering, and responsive layouts.",
         "Keyboard navigation, restored focus on closing details, reduced motion support, and optional pointer effects.",
       ],
-      next: "Gather feedback, add actual application screenshots, and deploy with a custom domain and HTTPS. The new source is available on the portfolio-v2 branch of the portfolio repository.",
+      next: "Gather feedback and add actual application screenshots. The portfolio is live at duin333.dpdns.org with Cloudflare DNS, Pages, and HTTPS; pushes to main automatically build and deploy.",
     },
     ja: {
       subtitle: "いま、つくっているものの置き場所。",
@@ -419,7 +419,7 @@ export const projects = [
         "操作できるフォルダー、共有できる詳細URL、Web・モバイルの絞り込み、レスポンシブ対応。",
         "キーボード操作、詳細を閉じた後のフォーカス復元、動きを減らす設定、マウス効果の切り替え。",
       ],
-      next: "フィードバックを反映し、実際の画面を追加します。独自ドメインとHTTPSでの公開を予定しています。新しいソースはリポジトリのportfolio-v2ブランチで公開しています。",
+      next: "フィードバックを反映し、実際の画面を追加します。Cloudflare DNS、Pages、HTTPSを使い、duin333.dpdns.orgで公開中です。mainへのpushで自動ビルド・デプロイします。",
     },
   },
   {
