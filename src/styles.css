@@ -2852,3 +2852,7 @@ h2 {
  .case-pagination { gap:12px; }
  .case-pagination a { padding:16px; }
 }
+
+.cv-download { border:1px solid var(--blue); color:var(--blue); background:var(--surface); }
+.hero-actions { flex-wrap:wrap; gap:16px; max-width:520px; }
+@media(max-width:760px) { .hero-actions { max-width:100%; } }

@@ -8,6 +8,7 @@ import MotionEffects from "./MotionEffects.jsx";
 import Mascot from "./Mascot.jsx";
 import {
   ArrowUp,
+  Download,
   Check,
   Code2,
   Copy,
@@ -592,6 +593,7 @@ export default function App() {
                   <FolderOpen size={18} />
                   {t.explore}
                 </a>
+                <a className="button cv-download" href="/cv/Nguyen-Thai-Ky-Duyen-CV-EN.pdf" download="Nguyen-Thai-Ky-Duyen-CV-EN.pdf"><Download size={18}/>{t.downloadCv}</a>
                 <a
                   className="text-link"
                   href={github}
@@ -794,7 +796,7 @@ export default function App() {
             <div>
               <span className="eyebrow">
                 <span className="cross">+</span>
-                Skills / {t.toolsLabel}
+                {t.skillsLabel} / {t.toolsLabel}
               </span>
               <h2 id="skills-title">
                 {t.toolsTitle}

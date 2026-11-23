@@ -534,6 +534,11 @@ for (const lang of languages) {
   roles.foodgo[lang] = {vi: "Dự án nhóm · phát triển chính luồng Tài xế", en: "Team project · Driver workflow lead", ja: "チーム開発 · ドライバー側のメイン開発者"}[lang];
 }
 
-copy.vi.nav = ["Dự án", "Về mình", "Skills", "Kinh nghiệm", "Kết nối"];
+copy.vi.nav = ["Dự án", "Về mình", "Kỹ năng", "Kinh nghiệm", "Kết nối"];
 copy.en.nav = ["Projects", "About", "Skills", "Experience", "Connect"];
 copy.ja.nav = ["プロジェクト", "自己紹介", "スキル", "経験・学歴", "連絡"];
+
+for (const lang of languages) Object.assign(copy[lang], {
+  skillsLabel: {vi:"Kỹ năng",en:"Skills",ja:"スキル"}[lang],
+  downloadCv: {vi:"Tải CV (EN)",en:"Download CV (EN)",ja:"CVをダウンロード（英語）"}[lang],
+});
