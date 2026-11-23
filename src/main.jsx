@@ -10,6 +10,7 @@ import "@fontsource/playfair-display/400-italic.css";
 import "@fontsource/noto-sans-jp/400.css";
 import "./styles.css";
 import "./motion.css";
+import "./wide-layout.css";
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />

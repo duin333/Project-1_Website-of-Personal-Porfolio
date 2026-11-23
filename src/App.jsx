@@ -844,7 +844,6 @@ export default function App() {
                 t.tooling,
                 [
                   "Git / GitHub",
-                  "Docker",
                   "Visual Studio",
                   "VS Code",
                   "NetBeans",

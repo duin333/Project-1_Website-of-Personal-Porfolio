@@ -2,7 +2,7 @@ export const linkedin = "https://www.linkedin.com/in/duyen-nguyen-evelyn-4a2a883
 export const profileCopy = {
   vi: {
     heroDescription: "Mình là Duyên — sinh viên CNTT, định hướng Fullstack Software Developer. Mình xây ứng dụng từ giao diện đến backend và cơ sở dữ liệu.",
-    aboutP: "Mình là sinh viên năm 3, học kỳ 1 ngành Công nghệ thông tin tại UTE, Đại học Đà Nẵng, khóa 2024–2028. Mình thích kết nối giao diện, API và dữ liệu thành một sản phẩm có thể sử dụng.",
+    aboutP: "Mình là sinh viên năm 3 ngành Công nghệ thông tin tại UTE, Đại học Đà Nẵng, khóa 2024–2028. Mình thích kết nối giao diện, API và dữ liệu thành một sản phẩm có thể sử dụng.",
     aboutP2: "Mình hướng tới vị trí Fullstack Software Developer và dự kiến tìm cơ hội thực tập part-time cuối năm 2027, tại Nhật Bản hoặc công ty Nhật ở Việt Nam.",
     educationValue: "CNTT · UTE, Đại học Đà Nẵng · 2024–2028 (dự kiến)",
     focusValue: "Fullstack Software Developer",
@@ -16,7 +16,7 @@ export const profileCopy = {
   },
   en: {
     heroDescription: "I’m Duyên, an IT student working toward a Fullstack Software Developer role. I build applications across interfaces, backend APIs, and databases.",
-    aboutP: "I’m a third-year IT student in semester one at UTE, the University of Danang, in the 2024–2028 cohort. I enjoy connecting interfaces, APIs, and data into usable products.",
+    aboutP: "I’m a third-year IT student at UTE, the University of Danang (2024–2028 cohort). I enjoy connecting interfaces, APIs, and data into usable products.",
     aboutP2: "I aim to become a Fullstack Software Developer and plan to seek a part-time internship in late 2027, either in Japan or at a Japanese company in Vietnam.",
     educationValue: "IT · UTE, University of Danang · 2024–2028 (expected)", focusValue: "Fullstack Software Developer",
     contactP: "I plan to seek a part-time internship in late 2027, in Japan or at a Japanese company in Vietnam. I’m currently open to project conversations and learning together.",
@@ -27,7 +27,7 @@ export const profileCopy = {
   },
   ja: {
     heroDescription: "ITを学んでいるDuyênです。フルスタックエンジニアを目指し、画面からバックエンドAPI、データベースまで開発しています。",
-    aboutP: "ダナン大学技術教育大学（UTE）のIT専攻、3年生の前期です。在学期間は2024〜2028年（予定）。画面、API、データをつなぎ、使えるアプリを作ることが好きです。",
+    aboutP: "ダナン大学技術教育大学（UTE）のIT専攻の3年生です。在学期間は2024〜2028年（予定）。画面、API、データをつなぎ、使えるアプリを作ることが好きです。",
     aboutP2: "フルスタックエンジニアを目指しています。2027年末ごろに、日本またはベトナムの日系企業でパートタイムのインターンシップを探す予定です。",
     educationValue: "IT · ダナン大学UTE · 2024〜2028年（予定）", focusValue: "フルスタックエンジニア",
     contactP: "2027年末ごろに、日本またはベトナムの日系企業でパートタイムのインターンシップを探す予定です。プロジェクトや学習について、お気軽にご連絡ください。",

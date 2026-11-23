@@ -1,0 +1,65 @@
+/* Wider reading area without changing the hero composition. */
+@media(min-width:1101px) {
+ .section-wrap { width:min(1760px,88vw); max-width:none; padding-inline:0; padding-block:clamp(64px,8vh,100px); }
+ .connect-section.section-wrap { width:100%; padding-inline:6vw; }
+ .connect-layout { width:100%; max-width:1760px; }
+}
+@media(min-width:1600px) {
+ .projects-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:28px; }
+ .project-item:nth-child(even) { padding-top:0; }
+ .project-folder { height:290px; }
+ .project-folder .project-art { height:180px; }
+ .folder-caption strong { font-size:1.35rem; }
+ .folder-caption { padding-block:12px; }
+ .project-info { padding-top:12px; }
+ .project-info p { font-size:.9375rem; }
+ .filter-row { padding-bottom:28px; }
+}
+/* One shared trunk; project entries are links, not repeated case studies. */
+.experience-section .journey-tree { margin:32px 0; }
+.experience-section .journey-tree::before,.experience-section .journey-tree::after { left:18px; bottom:35px; }
+.experience-section .journey-node { display:block; padding:0 0 12px 58px; }
+.experience-section .tree-dot { left:18px; top:16px; }
+.experience-section .journey-node>article,.experience-section .journey-node:nth-child(even)>article { border-radius:10px; padding:16px 20px; }
+.experience-section .journey-node>article::after,.experience-section .journey-node:nth-child(even)>article::after { left:-22px; right:auto; width:22px; top:33px; }
+.experience-section .project-node>article { display:grid; grid-template-columns:170px 150px minmax(0,1fr) auto; align-items:center; gap:20px; }
+.experience-section .tree-meta { margin:0; }
+.experience-section .project-node .tree-meta>span:last-child { display:none; }
+.experience-section .journey-node h3 { font-size:1.3rem; margin:0; }
+.experience-section .journey-node .tree-role { margin:0; font-size:.9375rem; }
+.journey-project-link { color:var(--blue); font-size:.8125rem; text-decoration:underline; text-underline-offset:4px; white-space:nowrap; }
+.experience-section .education-node>article { display:grid; grid-template-columns:170px minmax(0,1fr); gap:6px 20px; }
+.experience-section .education-node .tree-meta { grid-row:1 / 4; align-self:start; flex-wrap:wrap; justify-content:flex-start; }
+.experience-section .education-node ul { display:flex; gap:24px; flex-wrap:wrap; padding:0; list-style:none; }
+.experience-section .education-node ul li { margin:0; font-size:.875rem; }
+.experience-section .future-node>article { display:grid; grid-template-columns:170px 1fr; gap:5px 20px; }
+.experience-section .future-loading { grid-row:1 / 3; margin:0; }
+.experience-section .future-node p { font-size:.875rem; }
+.experience-section .journey-communities { padding-top:22px; }
+.experience-section .journey-communities>h3 { margin-bottom:16px; }
+.experience-section .journey-communities h4 { margin-bottom:6px; }
+.experience-section .journey-communities p { font-size:.9375rem; }
+@media(max-width:1000px) {
+ .experience-section .project-node>article { grid-template-columns:140px 1fr auto; gap:6px 16px; }
+ .experience-section .project-node .tree-meta { grid-row:1 / 3; }
+ .experience-section .project-node .tree-role { grid-column:2; }
+ .journey-project-link { grid-column:3; grid-row:1 / 3; }
+}
+@media(max-width:600px) {
+ .experience-section .journey-node { padding-left:46px; }
+ .experience-section .journey-node>article { padding:14px; }
+ .experience-section .project-node>article,.experience-section .education-node>article,.experience-section .future-node>article { display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
+ .experience-section .journey-node>article::after,.experience-section .journey-node:nth-child(even)>article::after { width:10px; left:-10px; }
+ .experience-section .education-node ul { display:block; }
+ .experience-section .journey-node h3 { font-size:1.2rem; }
+}
+@media(min-width:1101px) {
+ .section-wrap { padding-block:clamp(56px,6.5vh,88px); }
+ .section-heading { margin-bottom:28px; }
+ .experience-section .section-heading h2 { font-size:clamp(2rem,3vw,2.75rem); max-width:none; }
+}
+@media(min-width:1600px) {
+ .projects-section .section-heading h2 { font-size:52px; }
+ .projects-section .project-toolbar { padding-bottom:28px; }
+ .projects-section .archive-end { padding-top:24px; }
+}
