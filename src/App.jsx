@@ -552,6 +552,7 @@ export default function App() {
           </button>
         </div>
       </header>
+      <div id="music-stage" className="music-stage"/>
       {activeProject ? <ProjectPage project={projects.find(p=>p.id===activeProject)} lang={lang} t={t} close={closeProject} navigate={navigateProject}/> : <main id="main">
         <section id="home" className="hero">
           <div className="hero-kicker">

@@ -1,5 +1,6 @@
+import { createPortal } from "react-dom";
 import { useEffect, useRef, useState } from "react";
-import { Music2, Volume2, VolumeX, ChevronDown, Check, LoaderCircle, X, ExternalLink } from "lucide-react";
+import { Music2, Volume2, VolumeX, LoaderCircle, X, ExternalLink } from "lucide-react";
 import { tracks } from "./music.js";
 import { loadYouTubeApi } from "./youtube.js";
 const copy={
@@ -12,18 +13,18 @@ export default function MusicPlayer({lang}) {
  const t=copy[lang];
  const [index,setIndex]=useState(()=>Math.max(0,tracks.findIndex(p=>p.id===saved('duyen-track','howl-piano'))));
  const [playing,setPlaying]=useState(false),[pending,setPending]=useState(false),[error,setError]=useState(false),[blocked,setBlocked]=useState(false);
- const [open,setOpen]=useState(false),[enabled,setEnabled]=useState(false);
+ const [enabled,setEnabled]=useState(false);
  const [volume,setVolume]=useState(()=>{const n=Number(saved('duyen-volume','0.25'));return Number.isFinite(n)?Math.min(.7,Math.max(.05,n)):.25;});
- const player=useRef(null),host=useRef(null),root=useRef(null),trigger=useRef(null);
+ const player=useRef(null),host=useRef(null),root=useRef(null);
  const ready=useRef(false);
  const active=useRef(index),volumeRef=useRef(volume),intent=useRef(false),selectRef=useRef(null),position=useRef({});
  const track=tracks[index];
  function stop() {
   intent.current=false;
   try {if(player.current?.getCurrentTime)position.current[active.current]=player.current.getCurrentTime();player.current?.destroy();}catch{}
-  player.current=null;ready.current=false;setPlaying(false);setPending(false);setEnabled(false);setOpen(false);setBlocked(false);
+  player.current=null;ready.current=false;setPlaying(false);setPending(false);setEnabled(false);setBlocked(false);
  }
- function start(){intent.current=true;setError(false);setBlocked(false);setPending(true);setOpen(true);setEnabled(true);}
+ function start(){intent.current=true;setError(false);setBlocked(false);setPending(true);setEnabled(true);}
  function select(next,shouldPlay=false) {
   active.current=next;setIndex(next);setError(false);setBlocked(false);
   try{localStorage.setItem('duyen-track',tracks[next].id);}catch{}
@@ -54,23 +55,18 @@ export default function MusicPlayer({lang}) {
   }).catch(()=>{if(!disposed){setError(true);setPending(false);}});
   return()=>{disposed=true;try{player.current?.destroy();}catch{}player.current=null;ready.current=false;};
  },[enabled]);
- useEffect(()=>{
-  const outside=e=>{if(open&&!root.current?.contains(e.target)&&!enabled)setOpen(false);};
-  const esc=e=>{if(e.key==='Escape'&&open){stop();trigger.current?.focus();}};
-  document.addEventListener('pointerdown',outside);document.addEventListener('keydown',esc);
-  return()=>{document.removeEventListener('pointerdown',outside);document.removeEventListener('keydown',esc);};
- },[open,enabled]);
- return <div className="nav-music" data-playing={playing} ref={root}>
+ return <><div className="nav-music" data-playing={playing} ref={root}>
   <button type="button" className="music-box" onClick={()=>select((index+1)%tracks.length)} aria-label={`${t.next}: ${track.title}`} title={t.hint}><span className="music-record" aria-hidden="true"><Music2 size={16}/></span><span className="music-caption"><strong>{track.title}</strong><small>{pending?t.loading:playing?t.playing:t.paused}</small></span><span className="music-bars" aria-hidden="true"><i/><i/><i/></span></button>
-  <button type="button" ref={trigger} className="music-list-toggle" aria-label={t.list} aria-expanded={open} aria-controls="ghibli-player" onClick={()=>open?stop():setOpen(true)}><ChevronDown size={14}/></button>
   <button type="button" className="icon-button music-toggle" aria-label={enabled?t.off:t.on} aria-pressed={enabled} onClick={()=>enabled?stop():start()}>{pending?<LoaderCircle className="music-spinner" size={18}/>:enabled?<Volume2 size={18}/>:<VolumeX size={18}/>}</button>
-  {open&&<section className="ghibli-panel" id="ghibli-player" aria-label={t.list}>
-   <div className="ghibli-panel-top"><strong>{t.list}</strong><button type="button" className="icon-button" onClick={stop} aria-label={t.close}><X size={18}/></button></div>
-   {enabled&&<div className="youtube-host" ref={host}/>}
-   {(error||blocked)&&<p className="youtube-notice" role="status">{error?t.error:t.blocked}</p>}
-   <div className="ghibli-tracks">{tracks.map((p,i)=><button type="button" key={p.id} aria-pressed={index===i} onClick={()=>select(i,true)}><span><strong>{p.title}</strong><small>{p.artist} · {p.film}</small></span>{i===index&&<Check size={16}/>}</button>)}</div>
-   <label className="music-volume">{t.volume}<input type="range" min="0.05" max="0.7" step="0.05" value={volume} onChange={e=>setVolume(Number(e.target.value))}/></label>
-   <div className="music-credit"><small>{t.note}</small><a href={`https://www.youtube.com/watch?v=${track.videoId}`} target="_blank" rel="noopener noreferrer">{t.source}<ExternalLink size={12}/></a></div>
-  </section>}
- </div>;
+ </div>
+  {enabled&&document.getElementById('music-stage')&&createPortal(<section className="music-stage-inner" aria-label={t.list}>
+   <div className="youtube-host" ref={host}/>
+   <div className="music-stage-info"><small>{t.note}</small><strong>{track.title}</strong><span>{track.artist}</span>
+    {(error||blocked)&&<p className="youtube-notice" role="status">{error?t.error:t.blocked}</p>}
+    <label className="music-volume">{t.volume}<input type="range" min="0.05" max="0.7" step="0.05" value={volume} onChange={e=>setVolume(Number(e.target.value))}/></label>
+    <a href={`https://www.youtube.com/watch?v=${track.videoId}`} target="_blank" rel="noopener noreferrer">{t.source}<ExternalLink size={12}/></a>
+   </div>
+   <button type="button" className="icon-button" onClick={stop} aria-label={t.close}><X size={18}/></button>
+  </section>,document.getElementById('music-stage'))}
+ </>;
 }
