@@ -1,3 +1,4 @@
+import UISounds from "./UISounds.jsx";
 import MusicPlayer from "./MusicPlayer.jsx";
 import LanguagePicker from "./LanguagePicker.jsx";
 import "./nav-media.css";
@@ -524,6 +525,7 @@ export default function App() {
         </nav>
         <div className="header-controls">
           <MusicPlayer lang={lang}/>
+          <UISounds lang={lang}/>
           <LanguagePicker lang={lang} onChange={changeLanguage} label={t.language}/>
           <span className="control-divider" />
           <button
