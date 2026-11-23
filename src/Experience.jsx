@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { projects, projectRoute } from "./content.js";
 import { Code2, GraduationCap } from "lucide-react";
 
@@ -12,11 +13,52 @@ const details = {
  foodgo:{date:"10/2026–12/2026",role:{vi:"Phát triển chính luồng Tài xế · nhóm 3 người",en:"Driver workflow lead · 3-person team",ja:"ドライバー側のメイン開発 · 3人チーム"},points:{vi:["Phân tích và phát triển luồng nhận chuyến, lấy hàng, giao từng điểm.","Demo local lịch sử, thu nhập, thông báo; đang tích hợp realtime."],en:["Analyzed and built trip acceptance, pickup, and multi-stop delivery.","Local history, earnings, and notifications demo; realtime integration in progress."],ja:["受注、商品受け取り、各配達先のフローを分析・開発。","履歴・収入・通知のローカルデモ。リアルタイム連携は開発中。"]}},
  portfolio:{date:"11/2026",role:{vi:"UX/UI & Frontend Developer · cá nhân",en:"UX/UI & Frontend Developer · individual",ja:"UX/UI・フロントエンド · 個人開発"},points:{vi:["Thiết kế kho dự án ba ngôn ngữ với giao diện sáng/tối.","Phát triển tương tác folder, Mochi và triển khai Cloudflare Pages."],en:["Designed a trilingual project archive with light/dark themes.","Built folder interactions, Mochi, and Cloudflare Pages deployment."],ja:["3言語とライト・ダークテーマのポートフォリオを設計。","フォルダー操作、Mochi、Cloudflare Pagesでの公開。"]}},
 };
-export default function Experience({lang,t,onOpen}) {
+export default function Experience({lang,t,onOpen,mode}) {
+ const tree = useRef(null);
+ useEffect(() => {
+  const el=tree.current;
+  const preference=matchMedia("(prefers-reduced-motion: reduce)");
+  let cleanup=()=>{};
+  function setup() {
+   cleanup();
+   const nodes=[...el.querySelectorAll(":scope > .journey-node")];
+   if(mode==="off" || (mode!=="on" && preference.matches)) return;
+   el.classList.add("tree-animated");
+   let frame=0;
+   const update=()=>{
+    frame=0;
+    const bounds=el.getBoundingClientRect();
+    const target=innerHeight*.64;
+    const distance=Math.max(1,bounds.height-85);
+    el.style.setProperty("--tree-progress",Math.min(1,Math.max(0,(target-bounds.top-20)/distance)).toFixed(4));
+    let current=null;
+    nodes.forEach(node=>{
+     const rect=node.getBoundingClientRect();
+     if(rect.top < innerHeight*.94) node.classList.add("is-seen");
+     const reached=rect.top+30<=target;
+     node.classList.toggle("is-reached",reached);
+     if(reached) current=node;
+     node.classList.remove("is-current");
+    });
+    current?.classList.add("is-current");
+   };
+   const schedule=()=>{if(!frame)frame=requestAnimationFrame(update);};
+   update();
+   addEventListener("scroll",schedule,{passive:true});
+   addEventListener("resize",schedule);
+   cleanup=()=>{
+    removeEventListener("scroll",schedule);removeEventListener("resize",schedule);cancelAnimationFrame(frame);
+    el.classList.remove("tree-animated");el.style.removeProperty("--tree-progress");
+    nodes.forEach(node=>node.classList.remove("is-seen","is-reached","is-current"));
+   };
+  }
+  setup();preference.addEventListener("change",setup);
+  return ()=>{cleanup();preference.removeEventListener("change",setup);};
+ },[mode]);
  const l=labels[lang];
  return <section id="experience" className="experience-section section-wrap" aria-labelledby="experience-title">
   <div className="section-heading"><div><span className="eyebrow">EXPERIENCE / EDUCATION</span><h2 id="experience-title">{l.title}</h2></div><p>{l.intro}</p></div>
-  <ol className="journey-tree">
+  <ol className="journey-tree" ref={tree}>
    <li className="journey-node education-node"><span className="tree-dot" aria-hidden="true"><GraduationCap size={18}/></span><article><div className="tree-meta"><time dateTime="2024-09">09/2024</time><span>{l.education}</span></div><h3>{l.school}</h3><p className="tree-role">{l.degree}</p><ul>{l.schoolPoints.map(p=><li key={p}>{p}</li>)}</ul></article></li>
    {Object.entries(details).map(([id,d])=><li className={`journey-node ${id}`} key={id}><span className="tree-dot" aria-hidden="true"><Code2 size={17}/></span><article><div className="tree-meta"><span>{d.date}</span><span>{l.project}</span></div><h3><a href={projectRoute(lang,id)} onClick={e=>{if(!e.metaKey&&!e.ctrlKey){e.preventDefault();onOpen(id);}}}>{projects.find(p=>p.id===id).name}</a></h3><p className="tree-role">{d.role[lang]}</p><ul>{d.points[lang].map(p=><li key={p}>{p}</li>)}</ul></article></li>)}
    <li className="journey-node future-node"><span className="tree-dot" aria-hidden="true">✳</span><article><span className="future-loading" aria-label="Loading">LOADING <i/><i/><i/></span><h3>{l.future}</h3><p>{l.futureNote}</p></article></li>

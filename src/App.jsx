@@ -383,7 +383,7 @@ export default function App() {
     persist("duyen-theme", theme);
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", theme === "dark" ? "#131c24" : "#f5f6f2");
+      ?.setAttribute("content", theme === "dark" ? "#080d14" : "#f5f6f2");
   }, [theme]);
   useEffect(() => {
     document.documentElement.dataset.effects = effects ? "on" : "off";
@@ -848,7 +848,7 @@ export default function App() {
             </span>
           </p>
         </section>
-        <Experience lang={lang} t={t} onOpen={openProject}/>
+        <Experience lang={lang} t={t} onOpen={openProject} mode={effectsMode}/>
         <ContactSection lang={lang} t={t}/>
       </main>}
       <footer className="site-footer">

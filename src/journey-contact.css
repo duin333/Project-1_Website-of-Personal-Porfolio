@@ -62,3 +62,16 @@
 @media(max-width:500px) { .experience-section,.connect-section { padding-block:55px; } .journey-node { padding-left:50px; } .journey-node>article { padding:20px; } .journey-node h3 { font-size:1.45rem; } .journey-node>article::after,.journey-node:nth-child(even)>article::after { width:14px; left:-14px; } .tree-meta { flex-wrap:wrap; } .form-pair { grid-template-columns:1fr; gap:0; } .connect-form { padding:24px; } .connect-links a { padding:16px; font-size:.875rem; } }
 @media(prefers-reduced-motion:reduce) { .future-loading i { animation:none; } }
 :root[data-effects="off"] .future-loading i { animation:none; }
+
+/* A scroll-lit trunk and gently arriving milestones. */
+.journey-tree::after { content:""; position:absolute; width:2px; top:20px; bottom:65px; left:50%; background:linear-gradient(var(--blue),#87c8ff); transform:scaleY(var(--tree-progress,0)); transform-origin:top; pointer-events:none; box-shadow:0 0 14px #70a8ff55; }
+.tree-animated>.journey-node>article { opacity:0; transform:translateY(22px); transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s; }
+.tree-animated>.journey-node.is-seen>article { opacity:1; transform:translateY(0); }
+.journey-node .tree-dot { transition:background .3s,color .3s,box-shadow .3s; }
+.tree-animated>.is-reached>.tree-dot { background:var(--blue); color:var(--bg); }
+.tree-animated>.is-current>.tree-dot { box-shadow:0 0 0 7px color-mix(in srgb,var(--blue) 12%,transparent),0 0 25px color-mix(in srgb,var(--blue) 32%,transparent); }
+.tree-animated>.is-current>article { border-color:color-mix(in srgb,var(--blue) 65%,var(--line)); }
+.journey-node>article:focus-within { border-color:var(--blue); }
+@media(hover:hover) { .tree-animated>.is-seen>article:hover { transform:translateY(-4px); border-color:var(--blue); box-shadow:0 12px 32px #2868c218; } }
+@media(max-width:850px) { .journey-tree::after { left:18px; } }
+@media(prefers-reduced-motion:reduce) { :root:not([data-motion="full"]) .journey-node>article,:root:not([data-motion="full"]) .tree-dot { transition:none; } }
