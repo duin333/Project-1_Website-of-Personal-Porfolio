@@ -149,11 +149,8 @@ export default function Mascot({ lang, mode, concealed }) {
   });
   const [greeting, setGreeting] = useState(false);
   const actor = useRef(null),
-    hold = useRef(false),
     timer = useRef(null);
-  const hovering = useRef(false),
-    focused = useRef(false),
-    interacting = useRef(false);
+  const interacting = useRef(false);
   const t = messages[lang];
   useEffect(() => {
     try {
@@ -184,7 +181,11 @@ export default function Mascot({ lang, mode, concealed }) {
       frame = 0;
       const delta = last ? Math.min((time - last) / 1000, 0.05) : 0;
       last = time;
-      if (!hold.current && time > restUntil) {
+      // Pointer clicks can leave focus on the cat indefinitely. Only keyboard
+      // focus should pause walking; query live DOM state instead of stale refs.
+      const hovered = matchMedia("(hover: hover)").matches && el.matches(":hover");
+      const keyboardFocused = !!el.querySelector(":focus-visible");
+      if (!hovered && !keyboardFocused && !interacting.current && time > restUntil) {
         x += direction * delta * 35;
         traveled += delta;
         if (x >= max()) {
@@ -224,18 +225,16 @@ export default function Mascot({ lang, mode, concealed }) {
       reduced.removeEventListener("change", sync);
       document.removeEventListener("visibilitychange", sync);
       removeEventListener("resize", paint);
-      hold.current = false;
+
     };
   }, [visible, concealed, mode]);
   function hello() {
     setGreeting(true);
     clearTimeout(timer.current);
     interacting.current = true;
-    hold.current = true;
     timer.current = setTimeout(() => {
       setGreeting(false);
       interacting.current = false;
-      hold.current = hovering.current || focused.current;
     }, 3500);
   }
   if (concealed) return null;
@@ -255,24 +254,7 @@ export default function Mascot({ lang, mode, concealed }) {
       <div
         className={`mascot-actor ${greeting ? "is-greeting" : ""}`}
         ref={actor}
-        onPointerEnter={() => {
-          hovering.current = true;
-          hold.current = true;
-        }}
-        onPointerLeave={() => {
-          hovering.current = false;
-          hold.current = focused.current || interacting.current;
-        }}
-        onFocus={() => {
-          focused.current = true;
-          hold.current = true;
-        }}
-        onBlur={(e) => {
-          if (!e.currentTarget.contains(e.relatedTarget)) {
-            focused.current = false;
-            hold.current = hovering.current || interacting.current;
-          }
-        }}
+
       >
         {greeting && (
           <p className="mascot-speech" role="status">
